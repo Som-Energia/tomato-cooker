@@ -45,3 +45,49 @@ async def solver_race(model, dzdata_file, solvers):
 solvers = ['chuffed', 'gecode', 'coin-bc']
 mz_solvers = [minizinc.Solver.lookup(solver) for solver in solvers]
 asyncio.run(solver_race(model, dzdata_file, mz_solvers))
+
+#Limit entre els dos grups, falta ajuntar-ho
+
+    '''
+    #Expected output result.solution.graella
+    output = [[{1, 2, 3, 4, 5, 6, 7, 8},
+        {9, 10, 11, 12, 13, 14, 15, 16},
+        {17, 18, 19, 20, 21},
+        {22, 23, 24, 25, 26, 27, 28, 29}],
+        [{1, 2, 3, 4, 5, 6, 7, 8},
+        {9, 10, 11, 12, 13, 14, 15, 16},
+        {17, 18, 19, 20, 21},
+        {22, 23, 24, 25, 26, 27, 28, 29}],
+        [{1, 2, 3, 4, 5, 6, 7, 8},
+        {9, 10, 11, 12, 13, 14, 15, 16},
+        {17, 18, 19, 20, 21},
+        {22, 23, 24, 25, 26, 27, 28, 29}],
+        [{1, 2, 3, 4, 5, 6, 7, 8},
+        {9, 10, 11, 12, 13, 14, 15, 16},
+        {17, 18, 19, 20, 21},
+        {22, 23, 24, 25, 26, 27, 28, 29}],
+        [{1, 2, 3, 4, 5, 6, 7, 8},
+        {9, 10, 11, 12, 13, 14, 15, 16},
+        {17, 18, 19, 20, 21},
+        {22, 23, 24, 25, 26, 27, 28, 29}]]
+    '''
+
+    nlinies = 8
+    i = 0
+    str_days = ['dl', 'dm','dx','dj','dv']
+    timetable = {'timetable': {}}
+    for day in output:
+        llista = []
+        for slot in day:
+            slot = list(slot) + [0]*(nlinies - len(slot))
+            llista.append(slot)
+        timetable['timetable'][str_days[i]] = llista
+        i += 1
+
+
+    with open('data.yml', 'w') as outfile:
+        yaml.dump(timetable, outfile, default_flow_style=False, sort_keys=False)
+
+
+if __name__ == "__main__":
+	typer.run(graellada)
