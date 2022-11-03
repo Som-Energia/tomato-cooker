@@ -1,6 +1,9 @@
+import typer
+
 from minizinc import Instance, Model, Solver
 
-def graellada(dzndata_file = "./exemple-setmana.dzn"):
+
+def graellada(dzndata_file: str = "./exemple-setmana.dzn"):
 
     gecode = Solver.lookup("gecode")
 
@@ -8,7 +11,7 @@ def graellada(dzndata_file = "./exemple-setmana.dzn"):
     graellador.add_file(dzndata_file)
     instance = Instance(gecode, graellador)
     result = instance.solve()
-    result.solution.graella
+    print(result.solution.graella)
 
 if __name__ == "__main__":
-	graellada()
+	typer.run(graellada)
