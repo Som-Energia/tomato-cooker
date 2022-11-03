@@ -6,7 +6,7 @@ int: nNingus;
 int: nPersonesNingus;
 int: nDies;
 int: maxTornsPerDia;
-int: mimaxTornsSetmana = 2;
+int: maxTornsSetmana = 2;
 array[1..nPersones] of int: maxTornsSetmana;
 array[1..nPersones, 1..nDies] of set of 1..nFiles: indisponibilitats;
 
