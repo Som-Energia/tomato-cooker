@@ -33,6 +33,8 @@ constraint forall(i in 1..nDies) (tornsPerDia[i] = sum(tornsPerDiaPersona[i,..])
 
 constraint totalTorns = sum(tornsPerDia);
 
+int: tornsDisponibles = sum(nTorns);
+
 output ["Taula ocupacioSlot\n"];
 output [ show(ocupacioSlot[i,j]) ++ 
         if j == nSlots then "\n" else " " endif|
@@ -57,6 +59,10 @@ output ["Taula tornsPerDia\n"];
 output [ show(tornsPerDia[i]) ++  " " |
          i in 1..nDies
 ];
+
+output ["\n\n"];
+output ["TornsDisponibles\n"];
+output [ show(tornsDisponibles)];
 
 output ["\n\n"];
 output ["TotalTorns\n"];
