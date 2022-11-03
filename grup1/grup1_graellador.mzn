@@ -56,7 +56,7 @@ output ["foo \(graella[1,1,1]) constraint \((1 in indisponibilitats[1,1]))\n"];
 % constraint graella[1,1,1] = 1;
 
 % this should be satisfiable and is not
-constraint graella[1,2,1] = 1;
+% constraint graella[1,2,1] = 1;
 
 % minimitzar el nombre de ningus
 solve minimize count(persona_i in graella[1..nDies,1..nFiles,1..nLinies])(persona_i in ningus);
