@@ -14,6 +14,7 @@ array[1..nPersones, 1..nDies] of set of 1..nFiles: indisponibilitats;
 array[1..nDies,1..nFiles,1..nLinies] of var 1..nPersonesNingus: graella;
 
 
+int: tornsIdeals;
 
 include "alldifferent.mzn";
 include "count.mzn";
@@ -29,6 +30,7 @@ nPersonesNingus=nPersones+nNingus;
 % set of nPersones..nPersonesNingus: ningus;
 set of int: ningus = nPersones+1..nPersonesNingus;
 nDies=5;
+tornsIdeals = nLinies*nFiles*nDies div nPersones;
 maxTornsPerDia=2;
 maxTornsSetmana = [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9];
 indisponibilitats = [| {1,3,4}, {1}, {1}, {1}, {1}, 
@@ -98,13 +100,17 @@ output ["foo \(graella[1,1,1]) constraint \((1 in indisponibilitats[1,1]))\n"];
 % constraint graella[1,1,1] = 1;
 
 % this should be satisfiable and is not
-constraint graella[1,2,1] = 1;
+% constraint graella[1,2,1] = 1;
 
 % minimitzar el nombre de ningus
-solve minimize count(persona_i in graella[1..nDies,1..nFiles,1..nLinies])(persona_i in ningus);
+%solve minimize count(persona_i in graella[1..nDies,1..nFiles,1..nLinies])(persona_i in ningus);
 
 % intent de minimitzar les persones repetidores
 % solve minimize count(persona_i in graella[1..nDies,1..nFiles,1..nLinies])(persona_i in 1..nPersonesNingus);
+
+% solve minimize count(persona_i in graella[1..nDies,1..nFiles,1..nLinies])(persona_i in ningus);
+
+output ["\(count(persona_i in graella[1..nDies,1..nFiles,1..nLinies])(persona_i in 1..nPersonesNingus)))"];
 
 
 
