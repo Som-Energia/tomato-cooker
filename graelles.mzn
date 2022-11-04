@@ -13,7 +13,7 @@ array[1..nDies, 1..nSlots] of var set of 1..nPersones: ocupacioSlot;
 %dual
 array[1..nDies, 1..nPersones] of var set of 1..nSlots: ocupacioPersona;
 %matriu que guarda quan torns fa cada persona per dia
-array[1..nDies ,1..nPersones] of var 0..nSlots: tornsPerDiaPersona;
+array[1..nDies ,1..nPersones] of var 0..maxTorns: tornsPerDiaPersona;
 %array de torns que es fan cada dia
 array[1..nDies] of var (nSlots*(nLinies-nNingus))..(nSlots*nLinies): tornsPerDia;
 
@@ -22,13 +22,13 @@ constraint forall (i in 1..nDies, j in 1..nSlots, k in 1..nPersones) (((card(ocu
 
 %comprovar que no toca quan no es pot
 constraint forall (i in 1..nDies, j in 1..nPersones) (ocupacioPersona[i,j] intersect indisponibilitats[j,i] = {});
-% "emplenar" tornsPerDiaPersonaIT  
+% "emplenar" tornsPerDiaPersona  
 constraint forall (i in 1..nDies, j in 1..nPersones) (tornsPerDiaPersona[i,j] = card(ocupacioPersona[i,j]));
 %Alternativament Comprovar que no es fan el màxim de torns (2) en un dia
 constraint forall (i in 1..nDies, j in 1..nPersones) (tornsPerDiaPersona[i,j] <= maxTorns);
 %comprovar que fa igual o menys torns del que li toca
 constraint forall (i in 1..nPersones) (sum(tornsPerDiaPersona[..,i]) <= nTorns[i]);
-
+%calcul del total de torns
 constraint forall(i in 1..nDies) (tornsPerDia[i] = sum(tornsPerDiaPersona[i,..]));
 
 constraint totalTorns = sum(tornsPerDia);
@@ -68,7 +68,4 @@ output ["\n\n"];
 output ["TotalTorns\n"];
 output [ show(totalTorns)];
 
-
-%per començar satisfy però seria maximize persones/ minimize forats
-%fer servir el coin!!!
 solve maximize totalTorns; 
