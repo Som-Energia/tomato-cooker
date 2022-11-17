@@ -1,1 +1,1 @@
-from .solver import GridTomatoCooker
+from .solver import GridTomatoCooker, GridProblem

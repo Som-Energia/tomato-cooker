@@ -1,24 +1,32 @@
-from minizinc import Model
+import pytest
+
 from solver import GridTomatoCooker
 
 
-def test__solver_instance(graellador_path):
-    # given a valid minizinc model
-    model = Model(graellador_path)
+def test__solver_instance(
+    # given a path to a model description
+        graellador_path
+    ):
+    # When we create a new instance
+    solver = GridTomatoCooker(graellador_path)
 
-    # When we create a new instance of GridTomatoCooker
-    solver = GridTomatoCooker(model)
-
-    # Then returns a GridTomatoCooker instance
+    # Then returns a Solver instance
     assert isinstance(solver, GridTomatoCooker)
 
 
-def test__solver_grid_trigger(
-    # given a solver instance
-    solver
+@pytest.mark.asyncio
+async def test__grid_tomato_cooker__cook(
+    # given a solver
+    tomato_cooker,
+    # problem instance
+    grid_instance
 ):
     # When we start a new grid execution
-    results = solver.grid_trigger()
+    results = await tomato_cooker.cook(grid_instance)
 
-    # Then returns a Solver instance
-    assert isinstance(solver, Solver)
+    # Then a valid telephonic grid is generated
+    assert len(results) == grid_instance.nDies
+    for day in results:
+        assert len(day) == grid_instance.nSlots
+        for slot in day:
+            assert grid_instance.nLinies - grid_instance.nNingus <= len(slot) <= grid_instance.nLinies
