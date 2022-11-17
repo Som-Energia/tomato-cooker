@@ -12,6 +12,7 @@ pyyaml = "*"
 isort = "*"
 pytest = "*"
 ipdb = "*"
+pytest-asyncio = "*"
 
 [requires]
 python_version = "3.8"
