@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+typer = {extras = ["rich"], version = "*"}
+minizinc = "*"
+pyyaml = "*"
+
+[dev-packages]
+isort = "*"
+pytest = "*"
+pytest-asyncio = "*"
+pytest-cov = "*"
+ipdb = "*"
+flake8 = "*"
+black = "*"
+pre-commit = "*"
+gitlint = "*"
+ipython = "*"
