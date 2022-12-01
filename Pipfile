@@ -11,8 +11,11 @@ pyyaml = "*"
 [dev-packages]
 isort = "*"
 pytest = "*"
-ipdb = "*"
 pytest-asyncio = "*"
-
-[requires]
-python_version = "3.8"
+pytest-cov = "*"
+ipdb = "*"
+flake8 = "*"
+black = "*"
+pre-commit = "*"
+gitlint = "*"
+ipython = "*"
