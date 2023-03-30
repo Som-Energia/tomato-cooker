@@ -16,3 +16,4 @@ class TomaticProblem(GridProblem):
     maxTorns: int
     nTorns: list
     indisponibilitats: list
+    preferencies: list

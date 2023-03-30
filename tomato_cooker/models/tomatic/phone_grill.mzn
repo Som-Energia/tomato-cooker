@@ -6,10 +6,12 @@ int: nDies;
 int: maxTorns;
 array[1..nPersones] of int: nTorns;
 array[1..nPersones, 1..nDies] of set of 1..nSlots: indisponibilitats;
+array[1..nPersones, 1..nDies] of set of 1..nSlots: preferencies;
 var (nDies*nSlots*(nLinies-nNingus))..(nDies*nSlots*nLinies): totalTorns;
 
 %cada slot té un set de persones que (d'aquesta forma ja assegurem que no es repeteix persona a un slot)
 array[1..nDies, 1..nSlots] of var set of 1..nPersones: ocupacioSlot;
+
 %dual
 array[1..nDies, 1..nPersones] of var set of 1..nSlots: ocupacioPersona;
 %matriu que guarda quan torns fa cada persona per dia
@@ -22,6 +24,8 @@ constraint forall (d in 1..nDies, s in 1..nSlots, p in 1..nPersones) (((card(ocu
 
 %comprovar que no toca quan no es pot
 constraint forall (d in 1..nDies, p in 1..nPersones) (ocupacioPersona[d,p] intersect indisponibilitats[p,d] = {});
+%comprovar que toca quan es vol
+constraint forall (d in 1..nDies, p in 1..nPersones) (ocupacioPersona[d,p] intersect preferencies[p,d] = preferencies[p,d]);
 % "emplenar" tornsPerDiaPersonaIT
 constraint forall (d in 1..nDies, p in 1..nPersones) (tornsPerDiaPersona[d,p] = card(ocupacioPersona[d,p]));
 %Alternativament Comprovar que no es fan el màxim de torns (2) en un dia
