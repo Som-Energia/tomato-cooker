@@ -25,7 +25,7 @@ constraint forall (d in 1..nDies, s in 1..nSlots, p in 1..nPersones) (((card(ocu
 %comprovar que no toca quan no es pot
 constraint forall (d in 1..nDies, p in 1..nPersones) (ocupacioPersona[d,p] intersect indisponibilitats[p,d] = {});
 %comprovar que toca quan es vol
-constraint forall (d in 1..nDies, p in 1..nPersones) (ocupacioPersona[d,p] intersect preferencies[p,d] = preferencies[p,d]);
+constraint forall (d in 1..nDies, p in 1..nPersones) (preferencies[p,d] subset ocupacioPersona[d,p]);
 % "emplenar" tornsPerDiaPersonaIT
 constraint forall (d in 1..nDies, p in 1..nPersones) (tornsPerDiaPersona[d,p] = card(ocupacioPersona[d,p]));
 %Alternativament Comprovar que no es fan el màxim de torns (2) en un dia
