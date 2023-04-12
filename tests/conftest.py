@@ -20,12 +20,14 @@ def tomato_cooker(graellador_path, solvers):
 
 @pytest.fixture
 def tomatic_instance():
+    nPersones = 32
+    nDies = 5
     return TomaticProblem(
-        nPersones=32,
+        nPersones=nPersones,
         nLinies=8,
         nSlots=4,
         nNingus=2,
-        nDies=5,
+        nDies=nDies,
         maxTorns=6,
         nTorns=[
             9,
@@ -95,4 +97,12 @@ def tomatic_instance():
             {4}, {3}, {2}, {1}, {4},
             {2}, {1}, {3}, {4}, {2},
         ],
+        preferencies=[
+            set() for _ in range(nDies * nPersones)
+        ]
     )
+
+@pytest.fixture
+def tomatic_instance_with_preferences(tomatic_instance):
+    tomatic_instance.preferencies[0].add(2)
+    return tomatic_instance

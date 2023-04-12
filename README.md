@@ -36,10 +36,10 @@ tomatic_problem_params = {
     "maxTorns": 2,
     "nTorns": [3, 3, 3, 3,],
     "indisponibilitats": [
-        [{1}, {1}, {2}, {1}, {1}],
-        [{2}, {2}, {2}, {2}, {2}],
-        [{3}, {3}, {2}, {3}, {3}],
-        [{2}, {3}, {2}, {2}, {1}],
+        {1}, {1}, {2}, {1}, {1},
+        {2}, {2}, {2}, {2}, {2},
+        {3}, {3}, {2}, {3}, {3},
+        {2}, {3}, {2}, {2}, {1},
     ]
 }
 tomatic_problem = TomaticProblem(**tomatic_problem_params)
