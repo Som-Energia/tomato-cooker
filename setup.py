@@ -23,7 +23,7 @@ extras = {
 }
 
 setup(
-    name="Tomato Cooker",
+    name="tomato-cooker",
     version=VERSION,
     description="Minizinc problem solver",
     author="Som Energia SCCL",
