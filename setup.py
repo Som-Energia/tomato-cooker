@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
 
-from __version__ import VERSION
+from tomato_cooker.__init__ import VERSION
 
 readme = open("README.md").read()
 
