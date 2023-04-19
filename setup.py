@@ -33,7 +33,7 @@ setup(
     long_description_content_type="text/markdown",
     license="GNU Affero General Public License v3 or later (AGPLv3+)",
     packages=find_packages(exclude=["*[tT]est*"]),
-    python_requires=">=3.8.*",
+    python_requires=">=3.8.0",
     zip_safe=True,
     setup_requires=[],
     install_requires=required,
