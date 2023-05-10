@@ -101,6 +101,19 @@ def tomatic_instance():
             set() for _ in range(nDies * nPersones)
         ]
     )
+@pytest.fixture
+def tomatic_instance_one_day_three_people(tomatic_instance):
+    tomatic_instance.nPersones = 3
+    tomatic_instance.nDies = 1
+    tomatic_instance.nLinies = 1
+    tomatic_instance.nNingus = 0
+    tomatic_instance.maxTorns = 2
+    tomatic_instance.nTorns = [4,4,4]
+    tomatic_instance.indisponibilitats = [{2,3,4}, {1}, {1}]
+    tomatic_instance.preferencies=[
+        set() for _ in range(tomatic_instance.nDies * tomatic_instance.nPersones)
+    ]
+    return tomatic_instance
 
 @pytest.fixture
 def tomatic_instance_with_preferences(tomatic_instance):

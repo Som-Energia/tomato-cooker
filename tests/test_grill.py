@@ -37,6 +37,37 @@ async def test__grid_tomato_cooker__cook(
                 <= tomatic_instance.nLinies
             )
 
+@pytest.mark.asyncio
+async def test__grid_tomato_cooker__cook__especial_one_day_two_consecutive_slots_same_person(
+    # given a solver
+    tomato_cooker,
+    # problem instance
+    tomatic_instance_one_day_three_people,
+):
+    # When we start a new grid execution
+    results = await tomato_cooker.cook(tomatic_instance_one_day_three_people)
+
+    # Then a valid phone schedule is generated
+    assert len(results.solution.ocupacioSlot) == tomatic_instance_one_day_three_people.nDies
+    for day in results.solution.ocupacioSlot:
+        assert len(day) == tomatic_instance_one_day_three_people.nSlots
+        for slot in day:
+            assert (
+                tomatic_instance_one_day_three_people.nLinies - tomatic_instance_one_day_three_people.nNingus
+                <= len(slot)
+                <= tomatic_instance_one_day_three_people.nLinies
+            )
+            assert (
+                1 in results.solution.ocupacioSlot[0][0]
+            )
+            assert (
+                2 in results.solution.ocupacioSlot[0][1] or
+                3 in results.solution.ocupacioSlot[0][1]
+            )
+            assert (
+                2 in results.solution.ocupacioSlot[0][2] or
+                3 in results.solution.ocupacioSlot[0][2]
+            )
 
 @pytest.mark.asyncio
 async def test__grid_tomato_cooker__indisponibilities(

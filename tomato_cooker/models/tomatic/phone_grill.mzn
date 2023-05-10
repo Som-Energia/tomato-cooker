@@ -30,6 +30,8 @@ constraint forall (d in 1..nDies, p in 1..nPersones) (preferencies[p,d] subset o
 constraint forall (d in 1..nDies, p in 1..nPersones) (tornsPerDiaPersona[d,p] = card(ocupacioPersona[d,p]));
 %Alternativament Comprovar que no es fan el màxim de torns (2) en un dia
 constraint forall (d in 1..nDies, p in 1..nPersones) (tornsPerDiaPersona[d,p] <= maxTorns);
+%comprovar que si la pesona te el màxim de torns (2) en un dia son consecutius
+constraint forall (d in 1..nDies, p in 1..nPersones, s in 2..nSlots-1) (if tornsPerDiaPersona[d,p] == maxTorns /\ s in ocupacioPersona[d,p] then s-1 in ocupacioPersona[d,p] \/ s+1 in ocupacioPersona[d,p] else true endif);
 %comprovar que fa igual o menys torns del que li toca
 constraint forall (p in 1..nPersones) (sum(tornsPerDiaPersona[..,p]) <= nTorns[p]);
 
