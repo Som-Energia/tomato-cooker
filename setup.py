@@ -39,6 +39,9 @@ setup(
     install_requires=required,
     extras_require=extras,
     scripts=[],
+    package_data={
+        'tomato_cooker.models.tomatic': ['*mzn']
+    },
     include_package_data=True,
     test_suite="pytest",
     classifiers=[
