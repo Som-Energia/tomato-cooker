@@ -33,7 +33,7 @@ constraint forall (d in 1..nDies, p in 1..nPersones) (ocupacioPersona[d,p] inter
 % Person fixed torns are respected
 % TODO: ignore fixed torn if busy
 % TODO: ignore fixed torns if they exceed the load
-constraint forall (d in 1..nDies, p in 1..nPersones) (preferencies[p,d] subset ocupacioPersona[d,p]);
+constraint forall (d in 1..nDies, p in 1..nPersones) ((preferencies[p,d] diff indisponibilitats[p,d]) subset ocupacioPersona[d,p]);
 
 % tornsPerDiaPersona consistent with ocupacioPersona
 constraint forall (d in 1..nDies, p in 1..nPersones) (tornsPerDiaPersona[d,p] = card(ocupacioPersona[d,p]));

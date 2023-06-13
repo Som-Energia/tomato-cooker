@@ -103,3 +103,22 @@ async def test__grid_tomato_cooker__preferences(
         day = index % tomatic_instance_with_preferences.nDies
         for step in prefe_dance:
             assert person + 1 in results.solution.ocupacioSlot[day][step - 1]
+
+@pytest.mark.asyncio
+async def test__grid_tomato_cooker__busy_fixed_torn(
+    # given a solver
+    tomato_cooker,
+    # problem instance
+    tomatic_instance,
+):
+    nDays = tomatic_instance.nDies
+    person = 5
+    day = 3 # dj
+    hour = 2
+    idx = day + person * nDays
+    tomatic_instance.preferencies[idx].add(hour)
+    tomatic_instance.indisponibilitats[idx].add(hour)
+    # When we start a new grid execution
+    results = await tomato_cooker.cook(tomatic_instance)
+
+    assert person + 1 not in results.solution.ocupacioSlot[day][hour-1]
