@@ -4,7 +4,7 @@ int: nLinies;
 int: nSlots;
 int: nNingus;
 int: nDies;
-# TODO: rename maxLoadPerDay
+% TODO: rename maxLoadPerDay
 int: maxTorns;
 % Number of torns to be filled for each person
 array[1..nPersones] of int: nTorns;
@@ -50,7 +50,7 @@ constraint forall (p in 1..nPersones) (sum(tornsPerDiaPersona[..,p]) <= nTorns[p
 % tornsPerDia consistent with tornsPerDiaPersona
 constraint forall(d in 1..nDies) (tornsPerDia[d] = sum(tornsPerDiaPersona[d,..]));
 
-# totalTorns consistent with tornsPerDia
+% totalTorns consistent with tornsPerDia
 constraint totalTorns = sum(tornsPerDia);
 
 int: tornsDisponibles = sum(nTorns);
