@@ -20,15 +20,28 @@ array[1..nDies, 1..nSlots] of var set of 1..nPersones: ocupacioSlot;
 array[1..nDies, 1..nPersones] of var set of 1..nSlots: ocupacioPersona;
 % How many turns a person does each day
 array[1..nDies ,1..nPersones] of var 0..nSlots: tornsPerDiaPersona;
-% ?? array de torns que es fan cada dia
+% Turns done each day by anyone
 array[1..nDies] of var (nSlots*(nLinies-nNingus))..(nSlots*nLinies): tornsPerDia;
 
 % Every day/hour should have between nLines and nLines-nNingus
 % ocupacioSlot and ocupacioPersona should be consistent
-constraint forall (d in 1..nDies, s in 1..nSlots, p in 1..nPersones) (((card(ocupacioSlot[d,s])>=(nLinies-nNingus) /\ (card(ocupacioSlot[d,s])<=(nLinies))) /\ ((p in ocupacioSlot[d,s]) <-> (s in ocupacioPersona[d,p])))); 
+constraint forall (
+	d in 1..nDies,
+	s in 1..nSlots,
+	p in 1..nPersones
+) (
+	card(ocupacioSlot[d,s])>=(nLinies-nNingus) /\
+	card(ocupacioSlot[d,s])<=(nLinies) /\
+	(p in ocupacioSlot[d,s]) <-> (s in ocupacioPersona[d,p])
+); 
 
 % Person busy hours are respected
-constraint forall (d in 1..nDies, p in 1..nPersones) (ocupacioPersona[d,p] intersect indisponibilitats[p,d] = {});
+constraint forall (
+	d in 1..nDies,
+	p in 1..nPersones
+) (
+	ocupacioPersona[d,p] intersect indisponibilitats[p,d] = {}
+);
 
 % Person fixed torns are respected
 % TODO: ignore fixed torn if busy
