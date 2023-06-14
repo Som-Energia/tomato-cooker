@@ -46,22 +46,53 @@ constraint forall (
 % Person fixed torns are respected
 % TODO: ignore fixed torn if busy
 % TODO: ignore fixed torns if they exceed the load
-constraint forall (d in 1..nDies, p in 1..nPersones) ((preferencies[p,d] diff indisponibilitats[p,d]) subset ocupacioPersona[d,p]);
+constraint forall (
+	d in 1..nDies,
+	p in 1..nPersones
+) (
+	(preferencies[p,d] diff indisponibilitats[p,d]) subset ocupacioPersona[d,p]
+);
 
 % tornsPerDiaPersona consistent with ocupacioPersona
-constraint forall (d in 1..nDies, p in 1..nPersones) (tornsPerDiaPersona[d,p] = card(ocupacioPersona[d,p]));
+constraint forall (
+	d in 1..nDies,
+	p in 1..nPersones
+) (
+	tornsPerDiaPersona[d,p] = card(ocupacioPersona[d,p])
+);
 
 % Limit daily load to maxTorns
-constraint forall (d in 1..nDies, p in 1..nPersones) (tornsPerDiaPersona[d,p] <= maxTorns);
+constraint forall (
+	d in 1..nDies,
+	p in 1..nPersones
+) (
+	tornsPerDiaPersona[d,p] <= maxTorns
+);
 
 % If a person has more than one torn the same day, they should be consecutive
-constraint forall (d in 1..nDies, p in 1..nPersones, s in 2..nSlots-1) (if tornsPerDiaPersona[d,p] == maxTorns /\ s in ocupacioPersona[d,p] then s-1 in ocupacioPersona[d,p] \/ s+1 in ocupacioPersona[d,p] else true endif);
+constraint forall (
+	d in 1..nDies,
+	p in 1..nPersones,
+	s in 2..nSlots-1
+) (
+	if tornsPerDiaPersona[d,p] == maxTorns /\
+	s in ocupacioPersona[d,p] then s-1 in ocupacioPersona[d,p] \/
+	s+1 in ocupacioPersona[d,p] else true endif
+);
 
 % A person does at most the weakly load assigned
-constraint forall (p in 1..nPersones) (sum(tornsPerDiaPersona[..,p]) <= nTorns[p]);
+constraint forall (
+	p in 1..nPersones
+) (
+	sum(tornsPerDiaPersona[..,p]) <= nTorns[p]
+);
 
 % tornsPerDia consistent with tornsPerDiaPersona
-constraint forall(d in 1..nDies) (tornsPerDia[d] = sum(tornsPerDiaPersona[d,..]));
+constraint forall(
+	d in 1..nDies
+) (
+	tornsPerDia[d] = sum(tornsPerDiaPersona[d,..])
+);
 
 % totalTorns consistent with tornsPerDia
 constraint totalTorns = sum(tornsPerDia);
