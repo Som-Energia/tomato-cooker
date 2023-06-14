@@ -35,7 +35,7 @@ tomatic_problem_params = {
     "nLinies": 2,
     "nSlots": 3,
     "nNingus": 1,
-    "nDies": 5,
+    "nDays": 5,
     "maxTorns": 2,
     "nTorns": [3, 3, 3, 3,],
     "indisponibilitats": [

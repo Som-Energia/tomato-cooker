@@ -12,11 +12,11 @@ class TomaticProblem(GridProblem):
     nLinies: int
     nSlots: int
     nNingus: int
-    nDies: int
+    nDays: int
     maxTorns: int
     nTorns: list
     indisponibilitats: list
     forcedTurns: list
 
     def index(self, person, day):
-        return self.nDies*person + day
+        return self.nDays*person + day

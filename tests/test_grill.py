@@ -27,7 +27,7 @@ async def test__grid_tomato_cooker__cook(
     results = await tomato_cooker.cook(tomatic_instance)
 
     # Then a valid phone schedule is generated
-    assert len(results.solution.ocupacioSlot) == tomatic_instance.nDies
+    assert len(results.solution.ocupacioSlot) == tomatic_instance.nDays
     for day in results.solution.ocupacioSlot:
         assert len(day) == tomatic_instance.nSlots
         for slot in day:
@@ -48,7 +48,7 @@ async def test__grid_tomato_cooker__cook__especial_one_day_two_consecutive_slots
     results = await tomato_cooker.cook(tomatic_instance_one_day_three_people)
 
     # Then a valid phone schedule is generated
-    assert len(results.solution.ocupacioSlot) == tomatic_instance_one_day_three_people.nDies
+    assert len(results.solution.ocupacioSlot) == tomatic_instance_one_day_three_people.nDays
     for day in results.solution.ocupacioSlot:
         assert len(day) == tomatic_instance_one_day_three_people.nSlots
         for slot in day:
@@ -81,8 +81,8 @@ async def test__grid_tomato_cooker__indisponibilities(
 
     # TODO: Have fun 🦄🌈
     for index, in_this_pony in enumerate(tomatic_instance.indisponibilitats):
-        person = index // tomatic_instance.nDies
-        day = index % tomatic_instance.nDies
+        person = index // tomatic_instance.nDays
+        day = index % tomatic_instance.nDays
         for little_pony in in_this_pony:
             assert person + 1 not in results.solution.ocupacioSlot[day][little_pony - 1]
 
@@ -111,7 +111,7 @@ async def test__grid_tomato_cooker__busy_turns_ignored_as_fixed(
     # problem instance
     tomatic_instance,
 ):
-    nDays = tomatic_instance.nDies
+    nDays = tomatic_instance.nDays
     person = 5
     day = 3 # dj
     hour = 4
@@ -131,7 +131,7 @@ async def test__grid_tomato_cooker__less_load_than_fixed__takes_a_subset_of_fixe
     tomatic_instance_one_day_three_people,
 ):
     tomatic_instance = tomatic_instance_one_day_three_people
-    nDays = tomatic_instance.nDies
+    nDays = tomatic_instance.nDays
     person = 0
     day = 0 # dl
     hours = {1,2}
