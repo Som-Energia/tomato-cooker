@@ -1,5 +1,16 @@
 # Change log
 
+## Unreleased
+
+- Fix: Forced turns now behave if person is busy
+- Fix: Forced turns now behave if person has less load than fixed turns
+- Input variables translated to adhere Tomatic glossary
+    - nPersones -> nPersons
+    - nSlots -> nHours
+    - nDies -> nDays
+    - nLinies -> nLines
+    - preferencies -> forcedTurns
+
 ## 0.1.0 2023-05-12
 
 - Add a constraint to obtain consecutive turns for the same person in a day
