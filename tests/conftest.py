@@ -24,7 +24,7 @@ def tomatic_instance():
     nDays = 5
     return TomaticProblem(
         nPersons=nPersons,
-        nLinies=8,
+        nLines=8,
         nHours=4,
         nNingus=2,
         nDays=nDays,
@@ -105,7 +105,7 @@ def tomatic_instance():
 def tomatic_instance_one_day_three_people(tomatic_instance):
     tomatic_instance.nPersons = 3
     tomatic_instance.nDays = 1
-    tomatic_instance.nLinies = 1
+    tomatic_instance.nLines = 1
     tomatic_instance.nNingus = 0
     tomatic_instance.maxTorns = 2
     tomatic_instance.nTorns = [4,4,4]

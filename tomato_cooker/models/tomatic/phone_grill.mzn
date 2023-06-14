@@ -1,5 +1,5 @@
 int: nPersons;
-int: nLinies;
+int: nLines;
 int: nHours;
 int: nNingus;
 int: nDays;
@@ -23,7 +23,7 @@ array[Persons, Days] of var set of Hours: fixedWithoutBusy;
 array[Persons, Days] of var HourCount: nFixedPerDiaPersona;
 array[Persons] of var int: nFixedPerPerson;
 % interval of valid number simultaneusly covered lines
-var (nDays*nHours*(nLinies-nNingus))..(nDays*nHours*nLinies): totalTorns;
+var (nDays*nHours*(nLines-nNingus))..(nDays*nHours*nLines): totalTorns;
 
 % Output: Who is attending phone each day/hour
 array[Days, Hours] of var set of Persons: ocupacioSlot;
@@ -33,7 +33,7 @@ array[Days, Persons] of var set of Hours: ocupacioPersona;
 % How many turns a person does each day
 array[Days, Persons] of var HourCount: tornsPerDiaPersona;
 % Turns done each day by anyone
-array[Days] of var (nHours*(nLinies-nNingus))..(nHours*nLinies): tornsPerDia;
+array[Days] of var (nHours*(nLines-nNingus))..(nHours*nLines): tornsPerDia;
 
 % Determination of nFixedPerDiaPersona based on fixedWithoutBusy
 constraint forall (
@@ -66,8 +66,8 @@ constraint forall (
 	s in Hours,
 	p in Persons
 ) (
-	card(ocupacioSlot[d,s])>=(nLinies-nNingus) /\
-	card(ocupacioSlot[d,s])<=(nLinies) /\
+	card(ocupacioSlot[d,s])>=(nLines-nNingus) /\
+	card(ocupacioSlot[d,s])<=(nLines) /\
 	(p in ocupacioSlot[d,s]) <-> (s in ocupacioPersona[d,p])
 );
 

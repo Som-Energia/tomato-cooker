@@ -32,9 +32,9 @@ async def test__solution__well_formed(
         assert len(day) == tomatic_instance.nHours
         for slot in day:
             assert (
-                tomatic_instance.nLinies - tomatic_instance.nNingus
+                tomatic_instance.nLines - tomatic_instance.nNingus
                 <= len(slot)
-                <= tomatic_instance.nLinies
+                <= tomatic_instance.nLines
             )
 
 @pytest.mark.asyncio
@@ -53,9 +53,9 @@ async def test__multiple_turns_a_day__must_be_consecutive(
         assert len(day) == tomatic_instance_one_day_three_people.nHours
         for slot in day:
             assert (
-                tomatic_instance_one_day_three_people.nLinies - tomatic_instance_one_day_three_people.nNingus
+                tomatic_instance_one_day_three_people.nLines - tomatic_instance_one_day_three_people.nNingus
                 <= len(slot)
-                <= tomatic_instance_one_day_three_people.nLinies
+                <= tomatic_instance_one_day_three_people.nLines
             )
             assert (
                 1 in results.solution.ocupacioSlot[0][0]

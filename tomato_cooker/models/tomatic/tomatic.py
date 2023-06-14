@@ -9,7 +9,7 @@ MODEL_DEFINITION_PATH = Path(__file__).absolute().parent.joinpath("phone_grill.m
 @dataclasses.dataclass
 class TomaticProblem(GridProblem):
     nPersons: int
-    nLinies: int
+    nLines: int
     nHours: int
     nNingus: int
     nDays: int
