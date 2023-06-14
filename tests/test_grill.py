@@ -17,7 +17,7 @@ def test__solver_instance(
 
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__cook(
+async def test__solution__well_formed(
     # given a solver
     tomato_cooker,
     # problem instance
@@ -38,7 +38,7 @@ async def test__grid_tomato_cooker__cook(
             )
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__cook__especial_one_day_two_consecutive_slots_same_person(
+async def test__multiple_turns_a_day__must_be_consecutive(
     # given a solver
     tomato_cooker,
     # problem instance
@@ -70,7 +70,7 @@ async def test__grid_tomato_cooker__cook__especial_one_day_two_consecutive_slots
             )
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__indisponibilities(
+async def test__busy_persons__not_in_result(
     # given a solver
     tomato_cooker,
     # problem instance
@@ -88,7 +88,7 @@ async def test__grid_tomato_cooker__indisponibilities(
 
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__fixed_turn_always_included(
+async def test__forced_turns__included_in_resut(
     # given a solver
     tomato_cooker,
     # problem instance
@@ -105,7 +105,7 @@ async def test__grid_tomato_cooker__fixed_turn_always_included(
     assert person + 1 in results.solution.ocupacioSlot[day][hour-1]
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__busy_turns_ignored_as_fixed(
+async def test__forced_turns__ignored_if_busy(
     # given a solver
     tomato_cooker,
     # problem instance
@@ -124,7 +124,7 @@ async def test__grid_tomato_cooker__busy_turns_ignored_as_fixed(
     assert person + 1 not in results.solution.ocupacioSlot[day][hour-1]
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__less_load_than_fixed__takes_a_subset_of_fixed(
+async def test__forced_turns__reduced_if_person_has_less_load(
     # given a solver
     tomato_cooker,
     # problem instance
