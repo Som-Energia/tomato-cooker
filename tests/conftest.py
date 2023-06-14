@@ -25,7 +25,7 @@ def tomatic_instance():
     return TomaticProblem(
         nPersons=nPersons,
         nLinies=8,
-        nSlots=4,
+        nHours=4,
         nNingus=2,
         nDays=nDays,
         maxTorns=6,

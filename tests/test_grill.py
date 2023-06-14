@@ -29,7 +29,7 @@ async def test__grid_tomato_cooker__cook(
     # Then a valid phone schedule is generated
     assert len(results.solution.ocupacioSlot) == tomatic_instance.nDays
     for day in results.solution.ocupacioSlot:
-        assert len(day) == tomatic_instance.nSlots
+        assert len(day) == tomatic_instance.nHours
         for slot in day:
             assert (
                 tomatic_instance.nLinies - tomatic_instance.nNingus
@@ -50,7 +50,7 @@ async def test__grid_tomato_cooker__cook__especial_one_day_two_consecutive_slots
     # Then a valid phone schedule is generated
     assert len(results.solution.ocupacioSlot) == tomatic_instance_one_day_three_people.nDays
     for day in results.solution.ocupacioSlot:
-        assert len(day) == tomatic_instance_one_day_three_people.nSlots
+        assert len(day) == tomatic_instance_one_day_three_people.nHours
         for slot in day:
             assert (
                 tomatic_instance_one_day_three_people.nLinies - tomatic_instance_one_day_three_people.nNingus

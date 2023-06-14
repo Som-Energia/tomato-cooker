@@ -1,16 +1,15 @@
 int: nPersons;
 int: nLinies;
-% TODO: rename nSlots -> nHours
-int: nSlots;
+int: nHours;
 int: nNingus;
 int: nDays;
 % TODO: rename maxLoadPerDay
 int: maxTorns;
 
 set of int: Persons = 1..nPersons;
-set of int: Hours = 1..nSlots;
-set of int: InnerHours = 2..nSlots-1;
-set of int: HourCount = 0..nSlots;
+set of int: Hours = 1..nHours;
+set of int: InnerHours = 2..nHours-1;
+set of int: HourCount = 0..nHours;
 set of int: Days = 1..nDays;
 
 % Number of torns to be filled for each person
@@ -24,7 +23,7 @@ array[Persons, Days] of var set of Hours: fixedWithoutBusy;
 array[Persons, Days] of var HourCount: nFixedPerDiaPersona;
 array[Persons] of var int: nFixedPerPerson;
 % interval of valid number simultaneusly covered lines
-var (nDays*nSlots*(nLinies-nNingus))..(nDays*nSlots*nLinies): totalTorns;
+var (nDays*nHours*(nLinies-nNingus))..(nDays*nHours*nLinies): totalTorns;
 
 % Output: Who is attending phone each day/hour
 array[Days, Hours] of var set of Persons: ocupacioSlot;
@@ -34,7 +33,7 @@ array[Days, Persons] of var set of Hours: ocupacioPersona;
 % How many turns a person does each day
 array[Days, Persons] of var HourCount: tornsPerDiaPersona;
 % Turns done each day by anyone
-array[Days] of var (nSlots*(nLinies-nNingus))..(nSlots*nLinies): tornsPerDia;
+array[Days] of var (nHours*(nLinies-nNingus))..(nHours*nLinies): tornsPerDia;
 
 % Determination of nFixedPerDiaPersona based on fixedWithoutBusy
 constraint forall (
@@ -146,7 +145,7 @@ int: tornsDisponibles = sum(nTorns);
 
 output ["Taula ocupacioSlot\n"];
 output [ show(ocupacioSlot[d,s]) ++
-        if s == nSlots then "\n" else " " endif|
+        if s == nHours then "\n" else " " endif|
          d in Days, s in Hours
 ];
 output ["\n\n"];
