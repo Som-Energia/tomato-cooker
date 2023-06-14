@@ -15,6 +15,7 @@ class TomaticProblem(GridProblem):
     nDays: int
     maxTorns: int
     nTorns: list
+    names: list
     indisponibilitats: list
     forcedTurns: list
 

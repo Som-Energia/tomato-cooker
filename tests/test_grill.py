@@ -58,15 +58,15 @@ async def test__multiple_turns_a_day__must_be_consecutive(
                 <= tomatic_instance_one_day_three_people.nLines
             )
             assert (
-                1 in results.solution.ocupacioSlot[0][0]
+                'alice' in results.solution.ocupacioSlot[0][0]
             )
             assert (
-                2 in results.solution.ocupacioSlot[0][1] or
-                3 in results.solution.ocupacioSlot[0][1]
+                'bob' in results.solution.ocupacioSlot[0][1] or
+                'carol' in results.solution.ocupacioSlot[0][1]
             )
             assert (
-                2 in results.solution.ocupacioSlot[0][2] or
-                3 in results.solution.ocupacioSlot[0][2]
+                'bob' in results.solution.ocupacioSlot[0][2] or
+                'carol' in results.solution.ocupacioSlot[0][2]
             )
 
 @pytest.mark.asyncio
@@ -96,13 +96,14 @@ async def test__forced_turns__included_in_resut(
 ):
     day=1
     hour=4
-    person=0
-    idx=tomatic_instance.index(person=person, day=day)
+    person='C'
+    iperson = tomatic_instance.names.index(person)
+    idx=tomatic_instance.index(person=iperson, day=day)
     tomatic_instance.forcedTurns[idx].add(hour)
 
     # When we start a new grid execution
     results = await tomato_cooker.cook(tomatic_instance)
-    assert person + 1 in results.solution.ocupacioSlot[day][hour-1]
+    assert person in results.solution.ocupacioSlot[day][hour-1]
 
 @pytest.mark.asyncio
 async def test__forced_turns__ignored_if_busy(
@@ -111,17 +112,17 @@ async def test__forced_turns__ignored_if_busy(
     # problem instance
     tomatic_instance,
 ):
-    nDays = tomatic_instance.nDays
-    person = 5
+    person = 'C'
     day = 3 # dj
     hour = 4
-    idx=tomatic_instance.index(person=person, day=day)
+    iperson = tomatic_instance.names.index(person)
+    idx=tomatic_instance.index(person=iperson, day=day)
     tomatic_instance.forcedTurns[idx].add(hour)
     tomatic_instance.indisponibilitats[idx].add(hour)
     # When we start a new grid execution
     results = await tomato_cooker.cook(tomatic_instance)
 
-    assert person + 1 not in results.solution.ocupacioSlot[day][hour-1]
+    assert person not in results.solution.ocupacioSlot[day][hour-1]
 
 @pytest.mark.asyncio
 async def test__forced_turns__reduced_if_person_has_less_load(
@@ -131,15 +132,15 @@ async def test__forced_turns__reduced_if_person_has_less_load(
     tomatic_instance_one_day_three_people,
 ):
     tomatic_instance = tomatic_instance_one_day_three_people
-    nDays = tomatic_instance.nDays
-    person = 0
+    person = 'alice'
     day = 0 # dl
     hours = {1,2}
-    idx=tomatic_instance.index(person=person, day=day)
+    iperson = tomatic_instance.names.index(person)
+    idx=tomatic_instance.index(person=iperson, day=day)
     tomatic_instance.forcedTurns[idx]=hours # 2 fixed torns
-    tomatic_instance.nTorns[person]=1 # load=1
+    tomatic_instance.nTorns[iperson]=1 # load=1
     tomatic_instance.indisponibilitats[idx]=set() # no indisponibility that day
     # When we start a new grid execution
     results = await tomato_cooker.cook(tomatic_instance)
 
-    assert results.solution.ocupacioPersona[person][day].issubset(hours)
+    assert results.solution.ocupacioPersona[iperson][day].issubset(hours)

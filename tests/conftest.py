@@ -29,6 +29,7 @@ def tomatic_instance():
         nNingus=2,
         nDays=nDays,
         maxTorns=6,
+        names=list('ABCDEFGHIJKLMNOPQRSTUVWXYZ123456'),
         nTorns=[
             9,
             9,
@@ -108,6 +109,7 @@ def tomatic_instance_one_day_three_people(tomatic_instance):
     tomatic_instance.nLines = 1
     tomatic_instance.nNingus = 0
     tomatic_instance.maxTorns = 2
+    tomatic_instance.names=['alice', 'bob', 'carol']
     tomatic_instance.nTorns = [4,4,4]
     tomatic_instance.indisponibilitats = [{2,3,4}, {1}, {1}]
     tomatic_instance.forcedTurns=[

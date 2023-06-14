@@ -5,18 +5,24 @@ int: nNingus;
 int: nDays;
 % TODO: rename maxLoadPerDay
 int: maxTorns;
+enum names;
 
-set of int: Persons = 1..nPersons;
+set of names: Persons = names;
 set of int: Hours = 1..nHours;
 set of int: InnerHours = 2..nHours-1;
 set of int: HourCount = 0..nHours;
 set of int: Days = 1..nDays;
+
+constraint assert(nPersons = card(names),
+	"names is not nPersons long");
 
 % Number of torns to be filled for each person
 array[Persons] of int: nTorns;
 array[Persons, Days] of set of Hours: indisponibilitats;
 % Fixed turns assignments
 array[Persons, Days] of set of Hours: forcedTurns;
+
+
 % Fixed turns assignments after removing person's busy hours
 array[Persons, Days] of var set of Hours: fixedWithoutBusy;
 % Number of fixed torns per person after removing person busy
