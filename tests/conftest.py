@@ -20,10 +20,10 @@ def tomato_cooker(graellador_path, solvers):
 
 @pytest.fixture
 def tomatic_instance():
-    nPersones = 32
+    nPersons = 32
     nDays = 5
     return TomaticProblem(
-        nPersones=nPersones,
+        nPersons=nPersons,
         nLinies=8,
         nSlots=4,
         nNingus=2,
@@ -98,12 +98,12 @@ def tomatic_instance():
             {2}, {1}, {3}, {4}, {2},
         ],
         forcedTurns=[
-            set() for _ in range(nDays * nPersones)
+            set() for _ in range(nDays * nPersons)
         ]
     )
 @pytest.fixture
 def tomatic_instance_one_day_three_people(tomatic_instance):
-    tomatic_instance.nPersones = 3
+    tomatic_instance.nPersons = 3
     tomatic_instance.nDays = 1
     tomatic_instance.nLinies = 1
     tomatic_instance.nNingus = 0
@@ -111,7 +111,7 @@ def tomatic_instance_one_day_three_people(tomatic_instance):
     tomatic_instance.nTorns = [4,4,4]
     tomatic_instance.indisponibilitats = [{2,3,4}, {1}, {1}]
     tomatic_instance.forcedTurns=[
-        set() for _ in range(tomatic_instance.nDays * tomatic_instance.nPersones)
+        set() for _ in range(tomatic_instance.nDays * tomatic_instance.nPersons)
     ]
     return tomatic_instance
 

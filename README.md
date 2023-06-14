@@ -31,7 +31,7 @@ from tomato_cooker.models import TomaticProblem, tomatic
 
 # define a problem
 tomatic_problem_params = {
-    "nPersones": 4,
+    "nPersons": 4,
     "nLinies": 2,
     "nSlots": 3,
     "nNingus": 1,

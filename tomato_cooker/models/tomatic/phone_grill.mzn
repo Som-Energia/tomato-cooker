@@ -1,4 +1,4 @@
-int: nPersones;
+int: nPersons;
 int: nLinies;
 % TODO: rename nSlots -> nHours
 int: nSlots;
@@ -7,31 +7,31 @@ int: nDays;
 % TODO: rename maxLoadPerDay
 int: maxTorns;
 % Number of torns to be filled for each person
-array[1..nPersones] of int: nTorns;
-array[1..nPersones, 1..nDays] of set of 1..nSlots: indisponibilitats;
+array[1..nPersons] of int: nTorns;
+array[1..nPersons, 1..nDays] of set of 1..nSlots: indisponibilitats;
 % Fixed turns assignments
-array[1..nPersones, 1..nDays] of set of 1..nSlots: forcedTurns;
+array[1..nPersons, 1..nDays] of set of 1..nSlots: forcedTurns;
 % Fixed turns assignments after removing person's busy hours
-array[1..nPersones, 1..nDays] of var set of 1..nSlots: fixedWithoutBusy;
+array[1..nPersons, 1..nDays] of var set of 1..nSlots: fixedWithoutBusy;
 % Number of fixed torns per person after removing person busy
-array[1..nPersones, 1..nDays] of var 0..nSlots: nFixedPerDiaPersona;
-array[1..nPersones] of var int: nFixedPerPerson;
+array[1..nPersons, 1..nDays] of var 0..nSlots: nFixedPerDiaPersona;
+array[1..nPersons] of var int: nFixedPerPerson;
 % interval of valid number simultaneusly covered lines
 var (nDays*nSlots*(nLinies-nNingus))..(nDays*nSlots*nLinies): totalTorns;
 
 % Output: Who is attending phone each day/hour
-array[1..nDays, 1..nSlots] of var set of 1..nPersones: ocupacioSlot;
+array[1..nDays, 1..nSlots] of var set of 1..nPersons: ocupacioSlot;
 
 % Complementary to the former? Whose days/hours a person has a turn
-array[1..nDays, 1..nPersones] of var set of 1..nSlots: ocupacioPersona;
+array[1..nDays, 1..nPersons] of var set of 1..nSlots: ocupacioPersona;
 % How many turns a person does each day
-array[1..nDays ,1..nPersones] of var 0..nSlots: tornsPerDiaPersona;
+array[1..nDays ,1..nPersons] of var 0..nSlots: tornsPerDiaPersona;
 % Turns done each day by anyone
 array[1..nDays] of var (nSlots*(nLinies-nNingus))..(nSlots*nLinies): tornsPerDia;
 
 % Determination of nFixedPerDiaPersona based on fixedWithoutBusy
 constraint forall (
-	p in 1..nPersones,
+	p in 1..nPersons,
 	d in 1..nDays
 ) (
 	nFixedPerDiaPersona[p,d] = card(fixedWithoutBusy[p,d])
@@ -39,7 +39,7 @@ constraint forall (
 
 % nFixedPerPerson consistent with nFixedPerDiaPersona
 constraint forall(
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	nFixedPerPerson[p] = sum(nFixedPerDiaPersona[p,..])
 );
@@ -48,7 +48,7 @@ constraint forall(
 constraint forall (
 	d in 1..nDays,
 	s in 1..nSlots,
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	fixedWithoutBusy[p,d] = forcedTurns[p,d] diff indisponibilitats[p,d]
 );
@@ -58,7 +58,7 @@ constraint forall (
 constraint forall (
 	d in 1..nDays,
 	s in 1..nSlots,
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	card(ocupacioSlot[d,s])>=(nLinies-nNingus) /\
 	card(ocupacioSlot[d,s])<=(nLinies) /\
@@ -68,7 +68,7 @@ constraint forall (
 % Person busy hours are respected
 constraint forall (
 	d in 1..nDays,
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	ocupacioPersona[d,p] intersect indisponibilitats[p,d] = {}
 );
@@ -78,7 +78,7 @@ constraint forall (
 % TODO: ignore fixed torns if they exceed the load
 constraint forall (
 	d in 1..nDays,
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	fixedWithoutBusy[p,d] diff ocupacioPersona[d,p] = {} \/
 	(
@@ -91,7 +91,7 @@ constraint forall (
 % Determination of tornsPerDiaPersona based on ocupacioPersona
 constraint forall (
 	d in 1..nDays,
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	tornsPerDiaPersona[d,p] = card(ocupacioPersona[d,p])
 );
@@ -99,7 +99,7 @@ constraint forall (
 % Limit daily load to maxTorns
 constraint forall (
 	d in 1..nDays,
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	tornsPerDiaPersona[d,p] <= maxTorns
 );
@@ -107,7 +107,7 @@ constraint forall (
 % If a person has more than one torn the same day, they should be consecutive
 constraint forall (
 	d in 1..nDays,
-	p in 1..nPersones,
+	p in 1..nPersons,
 	s in 2..nSlots-1
 ) (
 	if tornsPerDiaPersona[d,p] == maxTorns /\
@@ -117,7 +117,7 @@ constraint forall (
 
 % A person does at most the weakly load assigned
 constraint forall (
-	p in 1..nPersones
+	p in 1..nPersons
 ) (
 	sum(tornsPerDiaPersona[..,p]) <= nTorns[p]
 );
@@ -142,15 +142,15 @@ output [ show(ocupacioSlot[d,s]) ++
 output ["\n\n"];
 output ["Taula ocupacioPersona\n"];
 output [ show(ocupacioPersona[d,p]) ++
-        if p == nPersones then "\n" else " " endif|
-         d in 1..nDays, p in 1..nPersones
+        if p == nPersons then "\n" else " " endif|
+         d in 1..nDays, p in 1..nPersons
 ];
 
 output ["\n\n"];
 output ["Taula tornsPerDiaPersona\n"];
 output [ show(tornsPerDiaPersona[d,p]) ++
-        if p == nPersones then "\n" else " " endif|
-         d in 1..nDays, p in 1..nPersones
+        if p == nPersons then "\n" else " " endif|
+         d in 1..nDays, p in 1..nPersons
 ];
 
 output ["\n\n"];
