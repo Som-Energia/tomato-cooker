@@ -98,7 +98,7 @@ async def test__grid_tomato_cooker__fixed_turn_always_included(
     hour=4
     person=0
     idx=tomatic_instance.index(person=person, day=day)
-    tomatic_instance.preferencies[idx].add(hour)
+    tomatic_instance.forcedTurns[idx].add(hour)
 
     # When we start a new grid execution
     results = await tomato_cooker.cook(tomatic_instance)
@@ -116,7 +116,7 @@ async def test__grid_tomato_cooker__busy_turns_ignored_as_fixed(
     day = 3 # dj
     hour = 4
     idx=tomatic_instance.index(person=person, day=day)
-    tomatic_instance.preferencies[idx].add(hour)
+    tomatic_instance.forcedTurns[idx].add(hour)
     tomatic_instance.indisponibilitats[idx].add(hour)
     # When we start a new grid execution
     results = await tomato_cooker.cook(tomatic_instance)
@@ -136,7 +136,7 @@ async def test__grid_tomato_cooker__less_load_than_fixed__takes_a_subset_of_fixe
     day = 0 # dl
     hours = {1,2}
     idx=tomatic_instance.index(person=person, day=day)
-    tomatic_instance.preferencies[idx]=hours # 2 fixed torns
+    tomatic_instance.forcedTurns[idx]=hours # 2 fixed torns
     tomatic_instance.nTorns[person]=1 # load=1
     tomatic_instance.indisponibilitats[idx]=set() # no indisponibility that day
     # When we start a new grid execution

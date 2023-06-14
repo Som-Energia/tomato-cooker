@@ -10,7 +10,7 @@ int: maxTorns;
 array[1..nPersones] of int: nTorns;
 array[1..nPersones, 1..nDies] of set of 1..nSlots: indisponibilitats;
 % Fixed turns assignments
-array[1..nPersones, 1..nDies] of set of 1..nSlots: preferencies;
+array[1..nPersones, 1..nDies] of set of 1..nSlots: forcedTurns;
 % Fixed turns assignments after removing person's busy hours
 array[1..nPersones, 1..nDies] of var set of 1..nSlots: fixedWithoutBusy;
 % Number of fixed torns per person after removing person busy
@@ -50,7 +50,7 @@ constraint forall (
 	s in 1..nSlots,
 	p in 1..nPersones
 ) (
-	fixedWithoutBusy[p,d] = preferencies[p,d] diff indisponibilitats[p,d]
+	fixedWithoutBusy[p,d] = forcedTurns[p,d] diff indisponibilitats[p,d]
 );
 
 % Every day/hour should have between nLines and nLines-nNingus

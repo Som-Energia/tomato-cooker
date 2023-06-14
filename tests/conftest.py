@@ -97,7 +97,7 @@ def tomatic_instance():
             {4}, {3}, {2}, {1}, {4},
             {2}, {1}, {3}, {4}, {2},
         ],
-        preferencies=[
+        forcedTurns=[
             set() for _ in range(nDies * nPersones)
         ]
     )
@@ -110,7 +110,7 @@ def tomatic_instance_one_day_three_people(tomatic_instance):
     tomatic_instance.maxTorns = 2
     tomatic_instance.nTorns = [4,4,4]
     tomatic_instance.indisponibilitats = [{2,3,4}, {1}, {1}]
-    tomatic_instance.preferencies=[
+    tomatic_instance.forcedTurns=[
         set() for _ in range(tomatic_instance.nDies * tomatic_instance.nPersones)
     ]
     return tomatic_instance

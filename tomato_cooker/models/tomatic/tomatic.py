@@ -16,7 +16,7 @@ class TomaticProblem(GridProblem):
     maxTorns: int
     nTorns: list
     indisponibilitats: list
-    preferencies: list
+    forcedTurns: list
 
     def index(self, person, day):
         return self.nDies*person + day
