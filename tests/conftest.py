@@ -115,7 +115,3 @@ def tomatic_instance_one_day_three_people(tomatic_instance):
     ]
     return tomatic_instance
 
-@pytest.fixture
-def tomatic_instance_with_preferences(tomatic_instance):
-    tomatic_instance.preferencies[0].add(2)
-    return tomatic_instance

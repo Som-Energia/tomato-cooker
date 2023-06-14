@@ -88,24 +88,24 @@ async def test__grid_tomato_cooker__indisponibilities(
 
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__preferences(
+async def test__grid_tomato_cooker__fixed_turn_always_included(
     # given a solver
     tomato_cooker,
     # problem instance
-    tomatic_instance_with_preferences,
+    tomatic_instance,
 ):
-    # When we start a new grid execution
-    results = await tomato_cooker.cook(tomatic_instance_with_preferences)
+    day=1
+    hour=4
+    person=0
+    idx=tomatic_instance.index(person=person, day=day)
+    tomatic_instance.preferencies[idx].add(hour)
 
-    # TODO: move your body 🕺
-    for index, prefe_dance in enumerate(tomatic_instance_with_preferences.preferencies):
-        person = index // tomatic_instance_with_preferences.nDies
-        day = index % tomatic_instance_with_preferences.nDies
-        for step in prefe_dance:
-            assert person + 1 in results.solution.ocupacioSlot[day][step - 1]
+    # When we start a new grid execution
+    results = await tomato_cooker.cook(tomatic_instance)
+    assert person + 1 in results.solution.ocupacioSlot[day][hour-1]
 
 @pytest.mark.asyncio
-async def test__grid_tomato_cooker__busy_fixed_torn(
+async def test__grid_tomato_cooker__busy_turns_ignored_as_fixed(
     # given a solver
     tomato_cooker,
     # problem instance
@@ -114,11 +114,32 @@ async def test__grid_tomato_cooker__busy_fixed_torn(
     nDays = tomatic_instance.nDies
     person = 5
     day = 3 # dj
-    hour = 2
-    idx = day + person * nDays
+    hour = 4
+    idx=tomatic_instance.index(person=person, day=day)
     tomatic_instance.preferencies[idx].add(hour)
     tomatic_instance.indisponibilitats[idx].add(hour)
     # When we start a new grid execution
     results = await tomato_cooker.cook(tomatic_instance)
 
     assert person + 1 not in results.solution.ocupacioSlot[day][hour-1]
+
+@pytest.mark.asyncio
+async def test__grid_tomato_cooker__less_load_than_fixed__takes_a_subset_of_fixed(
+    # given a solver
+    tomato_cooker,
+    # problem instance
+    tomatic_instance_one_day_three_people,
+):
+    tomatic_instance = tomatic_instance_one_day_three_people
+    nDays = tomatic_instance.nDies
+    person = 0
+    day = 0 # dl
+    hours = {1,2}
+    idx=tomatic_instance.index(person=person, day=day)
+    tomatic_instance.preferencies[idx]=hours # 2 fixed torns
+    tomatic_instance.nTorns[person]=1 # load=1
+    tomatic_instance.indisponibilitats[idx]=set() # no indisponibility that day
+    # When we start a new grid execution
+    results = await tomato_cooker.cook(tomatic_instance)
+
+    assert results.solution.ocupacioPersona[person][day].issubset(hours)

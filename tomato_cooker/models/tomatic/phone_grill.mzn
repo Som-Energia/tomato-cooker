@@ -9,7 +9,13 @@ int: maxTorns;
 % Number of torns to be filled for each person
 array[1..nPersones] of int: nTorns;
 array[1..nPersones, 1..nDies] of set of 1..nSlots: indisponibilitats;
+% Fixed turns assignments
 array[1..nPersones, 1..nDies] of set of 1..nSlots: preferencies;
+% Fixed turns assignments after removing person's busy hours
+array[1..nPersones, 1..nDies] of var set of 1..nSlots: fixedWithoutBusy;
+% Number of fixed torns per person after removing person busy
+array[1..nPersones, 1..nDies] of var 0..nSlots: nFixedPerDiaPersona;
+array[1..nPersones] of var int: nFixedPerPerson;
 % interval of valid number simultaneusly covered lines
 var (nDies*nSlots*(nLinies-nNingus))..(nDies*nSlots*nLinies): totalTorns;
 
@@ -23,6 +29,30 @@ array[1..nDies ,1..nPersones] of var 0..nSlots: tornsPerDiaPersona;
 % Turns done each day by anyone
 array[1..nDies] of var (nSlots*(nLinies-nNingus))..(nSlots*nLinies): tornsPerDia;
 
+% Determination of nFixedPerDiaPersona based on fixedWithoutBusy
+constraint forall (
+	p in 1..nPersones,
+	d in 1..nDies
+) (
+	nFixedPerDiaPersona[p,d] = card(fixedWithoutBusy[p,d])
+);
+
+% nFixedPerPerson consistent with nFixedPerDiaPersona
+constraint forall(
+	p in 1..nPersones
+) (
+	nFixedPerPerson[p] = sum(nFixedPerDiaPersona[p,..])
+);
+
+% Determination of fixedWithoutBusy
+constraint forall (
+	d in 1..nDies,
+	s in 1..nSlots,
+	p in 1..nPersones
+) (
+	fixedWithoutBusy[p,d] = preferencies[p,d] diff indisponibilitats[p,d]
+);
+
 % Every day/hour should have between nLines and nLines-nNingus
 % ocupacioSlot and ocupacioPersona should be consistent
 constraint forall (
@@ -33,7 +63,7 @@ constraint forall (
 	card(ocupacioSlot[d,s])>=(nLinies-nNingus) /\
 	card(ocupacioSlot[d,s])<=(nLinies) /\
 	(p in ocupacioSlot[d,s]) <-> (s in ocupacioPersona[d,p])
-); 
+);
 
 % Person busy hours are respected
 constraint forall (
@@ -50,10 +80,15 @@ constraint forall (
 	d in 1..nDies,
 	p in 1..nPersones
 ) (
-	(preferencies[p,d] diff indisponibilitats[p,d]) subset ocupacioPersona[d,p]
+	fixedWithoutBusy[p,d] diff ocupacioPersona[d,p] = {} \/
+	(
+		nFixedPerPerson[p] >= nTorns[p] /\
+		ocupacioPersona[d,p] diff fixedWithoutBusy[p,d] = {}
+	)
 );
 
-% tornsPerDiaPersona consistent with ocupacioPersona
+
+% Determination of tornsPerDiaPersona based on ocupacioPersona
 constraint forall (
 	d in 1..nDies,
 	p in 1..nPersones
@@ -135,4 +170,4 @@ output [ show(totalTorns)];
 
 %per començar satisfy però seria maximize persones/ minimize forats
 %fer servir el coin!!!
-solve maximize totalTorns; 
+solve maximize totalTorns;

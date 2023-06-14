@@ -17,3 +17,6 @@ class TomaticProblem(GridProblem):
     nTorns: list
     indisponibilitats: list
     preferencies: list
+
+    def index(self, person, day):
+        return self.nDies*person + day
