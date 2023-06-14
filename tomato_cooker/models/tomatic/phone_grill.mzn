@@ -73,18 +73,21 @@ constraint forall (
 	ocupacioPersona[d,p] intersect indisponibilitats[p,d] = {}
 );
 
-% Person fixed torns are respected
-% TODO: ignore fixed torn if busy
-% TODO: ignore fixed torns if they exceed the load
+% Person fixed torns are respected, if possible
+% - Ignored when the person is busy
+% - Ignored if there is less load than fixed turns
+%   still all taken turns should be a subset of the fixed
 constraint forall (
 	d in 1..nDays,
 	p in 1..nPersons
 ) (
-	fixedWithoutBusy[p,d] diff ocupacioPersona[d,p] = {} \/
-	(
-		nFixedPerPerson[p] >= nTorns[p] /\
-		ocupacioPersona[d,p] diff fixedWithoutBusy[p,d] = {}
-	)
+	% If fixed turns for a person do not exceed its max load
+	if nFixedPerPerson[p] <= nTorns[p]
+	% all fixed turns should be included in the result
+	then fixedWithoutBusy[p,d] subset ocupacioPersona[d,p]
+	% if not, all result turns should be fixed
+	else ocupacioPersona[d,p] subset fixedWithoutBusy[p,d]
+	endif
 );
 
 
