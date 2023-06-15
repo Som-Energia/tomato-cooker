@@ -59,7 +59,7 @@ constraint forall(
 % Determination of fixedWithoutBusy
 constraint forall (
 	d in Days,
-	s in Hours,
+	h in Hours,
 	p in Persons
 ) (
 	fixedWithoutBusy[p,d] = forcedTurns[p,d] diff indisponibilitats[p,d]
@@ -69,12 +69,12 @@ constraint forall (
 % ocupacioSlot and ocupacioPersona should be consistent
 constraint forall (
 	d in Days,
-	s in Hours,
+	h in Hours,
 	p in Persons
 ) (
-	card(ocupacioSlot[d,s])>=(nLines-nNingus) /\
-	card(ocupacioSlot[d,s])<=(nLines) /\
-	(p in ocupacioSlot[d,s]) <-> (s in ocupacioPersona[d,p])
+	card(ocupacioSlot[d,h])>=(nLines-nNingus) /\
+	card(ocupacioSlot[d,h])<=(nLines) /\
+	(p in ocupacioSlot[d,h]) <-> (h in ocupacioPersona[d,p])
 );
 
 % Person busy hours are respected
@@ -123,11 +123,11 @@ constraint forall (
 constraint forall (
 	d in Days,
 	p in Persons,
-	s in InnerHours
+	h in InnerHours
 ) (
 	if tornsPerDiaPersona[d,p] == maxTorns /\
-	s in ocupacioPersona[d,p] then s-1 in ocupacioPersona[d,p] \/
-	s+1 in ocupacioPersona[d,p] else true endif
+	h in ocupacioPersona[d,p] then h-1 in ocupacioPersona[d,p] \/
+	h+1 in ocupacioPersona[d,p] else true endif
 );
 
 % A person does at most the weakly load assigned
@@ -150,9 +150,9 @@ constraint totalTorns = sum(tornsPerDia);
 int: tornsDisponibles = sum(nTorns);
 
 output ["Taula ocupacioSlot\n"];
-output [ show(ocupacioSlot[d,s]) ++
-        if s == nHours then "\n" else " " endif|
-         d in Days, s in Hours
+output [ show(ocupacioSlot[d,h]) ++
+        if h == nHours then "\n" else " " endif|
+         d in Days, h in Hours
 ];
 output ["\n\n"];
 output ["Taula ocupacioPersona\n"];
