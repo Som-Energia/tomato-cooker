@@ -78,7 +78,7 @@ constraint forall (
 ) (
 	card(ocupacioSlot[d,h])>=(nLines-nNingus) /\
 	card(ocupacioSlot[d,h])<=(nLines) /\
-	(p in ocupacioSlot[d,h]) <-> (h in ocupacioPersona[d,p])
+	(p in ocupacioSlot[d,h]) = (h in ocupacioPersona[d,p])
 );
 
 % Person busy hours are respected
