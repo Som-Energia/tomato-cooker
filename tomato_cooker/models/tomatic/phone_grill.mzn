@@ -14,7 +14,11 @@ set of int: HourCount = 0..nHours;
 set of int: Days = 1..nDays;
 
 constraint assert(nPersons = card(names),
-	"names is not nPersons long");
+	"'nPersons' (" ++ format(nPersons) ++
+	") does not match the size of 'names' (" ++
+	format(card(names)) ++ ")"
+);
+
 
 % Number of torns to be filled for each person
 array[Persons] of int: nTorns;
