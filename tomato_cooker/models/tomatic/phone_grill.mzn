@@ -153,24 +153,30 @@ constraint totalTorns = sum(tornsPerDia);
 
 int: tornsDisponibles = sum(nTorns);
 
+output ["\n\n"];
+output ["Solution:\n"];
+output [show2d(ocupacioSlot)];
+output ["\n\n"];
 output ["Taula ocupacioSlot\n"];
-output [ show(ocupacioSlot[d,h]) ++
-        if h == nHours then "\n" else " " endif|
-         d in Days, h in Hours
+output [
+	show(ocupacioSlot[d,h]) ++
+        if h == nHours then "\n" else " " endif
+	| d in Days, h in Hours
 ];
 output ["\n\n"];
 output ["Taula ocupacioPersona\n"];
-output [ show(ocupacioPersona[d,p]) ++
-        if p == nPersons then "\n" else " " endif|
-         d in Days, p in Persons
+output [
+        format(d) ++ ": " ++
+	concat(h in Hours)(
+		if fix(h in ocupacioPersona[d,p]) then "x" else "." endif
+	) ++
+        if d == nDays then " " ++ format(p) ++ "\n" else " " endif
+	| p in Persons, d in Days
 ];
 
 output ["\n\n"];
 output ["Taula tornsPerDiaPersona\n"];
-output [ show(tornsPerDiaPersona[d,p]) ++
-        if p == nPersons then "\n" else " " endif|
-         d in Days, p in Persons
-];
+output [show2d(tornsPerDiaPersona)];
 
 output ["\n\n"];
 output ["Taula tornsPerDia\n"];
@@ -179,12 +185,22 @@ output [ show(tornsPerDia[d]) ++  " " |
 ];
 
 output ["\n\n"];
-output ["TornsDisponibles\n"];
-output [ show(tornsDisponibles)];
+output [
+	"Complecio: ",
+	show(totalTorns),
+	"/",
+	show(tornsDisponibles),
+	"/",
+	show(nDays*nHours*nLines)
+];
 
 output ["\n\n"];
-output ["TotalTorns\n"];
-output [ show(totalTorns)];
+output ["indisponibilitats\n"];
+output [ show2d(indisponibilitats)];
+
+output ["\n\n"];
+output ["forçats\n"];
+output [ show2d(forcedTurns)];
 
 
 %per començar satisfy però seria maximize persones/ minimize forats
