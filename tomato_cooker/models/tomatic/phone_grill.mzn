@@ -86,7 +86,7 @@ constraint forall (
 	d in Days,
 	p in Persons
 ) (
-	ocupacioPersona[d,p] intersect indisponibilitats[p,d] = {}
+	card(ocupacioPersona[d,p] intersect indisponibilitats[p,d])=0
 );
 
 % Person fixed torns are respected, if possible
