@@ -1,5 +1,9 @@
 # Change log
 
+## 0.2.1 (2023-06-20)
+
+  Dterministic mode for testing
+
 ## 0.2.0 (2023-06-20)
 
 - Fix: Forced turns now behave if person is busy
