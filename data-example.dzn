@@ -8,6 +8,8 @@ maxTorns = 2;
 nNingus = 1;
 names = [ alice, bob, claire, danna, emily];
 nTorns = [3,2,1,5,4 ];
+
+% columns are days, rows persons, and the set contains hours
 forcedTurns = array2d(Persons, Days, [
         {}, {}, {}, % alice
         {}, {}, {}, % bob
@@ -15,6 +17,8 @@ forcedTurns = array2d(Persons, Days, [
         {}, {}, {}, % danna
         {}, {}, {}  % emily
 ]);
+
+% columns are days, rows persons, and the set contains hours
 indisponibilitats = [|
         {1}, {}, {}, | % alice
         {1}, {}, {}, | % bob
