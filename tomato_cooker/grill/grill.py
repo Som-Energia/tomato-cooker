@@ -11,7 +11,7 @@ class GrillTomatoCooker:
         self.model = minizinc.Model(model_path)
         self.solvers = solvers
 
-    async def cook(self, problem_instance: TomaticProblem) -> Any:
+    async def cook(self, problem_instance: TomaticProblem, deterministic=False) -> Any:
         result = []
         for attr, value in problem_instance._asdict().items():
             self.model[attr] = value
@@ -22,7 +22,8 @@ class GrillTomatoCooker:
             solver = minizinc.Solver.lookup(solver_name)
             inst = minizinc.Instance(solver, self.model)
 
-            task = asyncio.create_task(inst.solve_async())
+            seed = 0 if deterministic else None
+            task = asyncio.create_task(inst.solve_async(random_seed = seed))
             task.solver = solver.name
             tasks.add(task)
 
