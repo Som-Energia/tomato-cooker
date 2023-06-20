@@ -1,0 +1,26 @@
+% minizinc tomato_cooker/models/tomatic/phone_grill.mzn data-example.dzn
+
+nDays = 3;
+nHours = 4;
+nLines = 2;
+nPersons = 5;
+maxTorns = 2;
+nNingus = 1;
+names = [ alice, bob, claire, danna, emily];
+nTorns = [3,2,1,5,4 ];
+forcedTurns = array2d(Persons, Days, [
+        {}, {}, {}, % alice
+        {}, {}, {}, % bob
+        {}, {}, {}, % claire
+        {}, {}, {}, % danna
+        {}, {}, {}  % emily
+]);
+indisponibilitats = [|
+        {1}, {}, {}, | % alice
+        {1}, {}, {}, | % bob
+        {1}, {}, {}, | % claire
+        {1}, {}, {}, | % danna
+        {1}, {}, {}    % emily
+|];
+
+
