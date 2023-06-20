@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
 
-from tomato_cooker.__init__ import VERSION
+from tomato_cooker import VERSION
 
 readme = open("README.md").read()
 
-required = ["minizinc", "pyyaml"]
+required = [
+    "minizinc",
+    "pyyaml",
+]
 
 extras = {
     "dev": [

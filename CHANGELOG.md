@@ -1,6 +1,6 @@
 # Change log
 
-## Unreleased
+## 0.2.0 (2023-06-20)
 
 - Fix: Forced turns now behave if person is busy
 - Fix: Forced turns now behave if person has less load than fixed turns
@@ -14,7 +14,7 @@
 - Persons domain are names not indexes. Easier to debug and understand
   results and less error prone.
 
-## 0.1.0 2023-05-12
+## 0.1.0 (2023-05-12)
 
 - Add a constraint to obtain consecutive turns for the same person in a day
 - Fix: packaging now includes mzn file
