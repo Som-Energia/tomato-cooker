@@ -4,12 +4,15 @@
 
 - Fix: Forced turns now behave if person is busy
 - Fix: Forced turns now behave if person has less load than fixed turns
+- Fix: Busy hours were not taken into account
 - Input variables translated to adhere Tomatic glossary
     - nPersones -> nPersons
     - nSlots -> nHours
     - nDies -> nDays
     - nLinies -> nLines
     - preferencies -> forcedTurns
+- Persons domain are names not indexes. Easier to debug and understand
+  results and less error prone.
 
 ## 0.1.0 2023-05-12
 
