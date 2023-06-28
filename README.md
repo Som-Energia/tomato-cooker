@@ -1,3 +1,7 @@
+![PyPI](https://img.shields.io/pypi/v/tomato-cooker)
+[![CI](https://github.com/Som-Energia/tomato-cooker/actions/workflows/main.yml/badge.svg)](https://github.com/Som-Energia/tomato-cooker/actions/workflows/main.yml)
+
+
 # cooked-tomato
 
 Timetable scheduler for phone attention turns in Som Energia
