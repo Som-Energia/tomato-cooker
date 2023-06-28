@@ -1,0 +1,37 @@
+% minizinc tomato_cooker/models/tomatic/phone_grill.mzn data-example.dzn
+
+
+days = [ dl, dm, dv ];
+nHours = 4;
+nLines = 2;
+names = [
+        alice, barb, carol, diane, emily, fanny,
+        nobody
+];
+
+Nobodies = { nobody };
+
+maxLoad = [
+        3,2,5,5,2,3,
+        4
+];
+maxPersonLoadPerDay = 2;
+
+forced = array2d(Days, Hours, [
+        {alice}, {}, {}, {barb}, % dl
+        {alice}, {}, {}, {}, % dm
+        {}, {}, {}, {}  % dv
+]);
+
+busy = array2d(Days, Hours, [
+        {alice, barb, carol, diane, fanny}, {}, {barb}, {}, % dl
+        {}, {}, {}, {}, % dm
+        {}, {}, {}, {}  % dv
+]);
+
+inconvenient = array2d(Days, Hours, [
+        {alice}, {alice}, {alice}, {alice}, % dl
+        {barb}, {barb}, {alice, barb, carol}, {barb}, % dm
+        {barb}, {barb}, {barb}, {barb}  % dv
+]);
+
