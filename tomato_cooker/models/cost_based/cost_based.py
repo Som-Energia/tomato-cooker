@@ -16,9 +16,9 @@ class TimetableScenario(GridProblem):
     nLines: int = 6
     forced: list[list[set[str]]] | None = None
     busy: list[list[set[str]]] | None = None 
-    inconvenient: list[list[set[str]]] | None = None
+    undesired: list[list[set[str]]] | None = None
 
-    penaltyInconvenientHours: int = 5 # Assigning a turn someone marked as inconvenient
+    penaltyUndesiredHours: int = 5 # Assigning a turn someone marked as undesired
     penaltyMultipleHours: int = 10 # Multiple turns a day, multiplies by n(n-1) n: number of daily turns
     penaltyNoBrunch: int = 10 # Person daily distribution 0110, no time for lunch
     penaltyFarDiscontinuousHours: int = 20 # Persons daily distribution 1001, minor focus change
@@ -39,7 +39,7 @@ class TimetableScenario(GridProblem):
         timetable[iday][hour].update(persons)
 
     def __post_init__(self):
-        for attrib in ('forced', 'busy', 'inconvenient'):
+        for attrib in ('forced', 'busy', 'undesired'):
             if getattr(self, attrib): continue
             setattr(self, attrib, self._days_hours_matrix(set))
 
@@ -50,8 +50,8 @@ class TimetableScenario(GridProblem):
     def busyTurn(self, day, hour, *persons):
         self._add_to_days_hours_matrix(self.busy, day, hour, persons)
 
-    def inconvenientTurn(self, day, hour, *persons):
-        self._add_to_days_hours_matrix(self.inconvenient, day, hour, persons)
+    def undesiredTurn(self, day, hour, *persons):
+        self._add_to_days_hours_matrix(self.undesired, day, hour, persons)
 
     async def solve(self, deterministic=False):
         from ...grill import GrillTomatoCooker

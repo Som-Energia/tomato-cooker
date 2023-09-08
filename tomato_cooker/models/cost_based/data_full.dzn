@@ -49,7 +49,7 @@ busy = array2d(Days, Hours, [
         {}, {}, {}, {}  % dv
 ]);
 
-inconvenient = array2d(Days, Hours, [
+undesired = array2d(Days, Hours, [
         {alice}, {alice}, {alice}, {alice}, % dl
         {barb}, {barb}, {alice, barb, carol}, {barb}, % dm
         {}, {}, {}, {}, % dx

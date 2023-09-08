@@ -16,14 +16,14 @@ int: maxPersonLoadPerDay;
 
 array[Persons] of int: maxLoad;
 array[Days, Hours] of set of Persons: busy;
-array[Days, Hours] of set of Persons: inconvenient;
+array[Days, Hours] of set of Persons: undesired;
 array[Days, Hours] of set of Persons: forced;
 array[Days, Hours] of var set of Persons: timetable;
 
 int: timetableSize = nDays * nHours * nLines;
 
 /*
-int: penaltyInconvenientHours =  5; % When includes turn someone has marked as inconvenient
+int: penaltyUndesiredHours =  5; % When includes turn someone has marked as undesired
 int: penaltyMultipleHours = 10; % Multiplies by n(n-1) being n the turns a given person is assigned each day
 int: penaltyNoBrunch = 10; % Every time someone is assigned in a day the two middle turns of the day (no brunch time)
 int: penaltyFarDiscontinuousHours = 20; % Every time some one has two non continuous torns in a day
@@ -31,7 +31,7 @@ int: penaltyDiscontinuousHours = 30; % Every time some one has two non continuou
 int: penaltyMarathon = 40; % Every time someone is assigned in a day three turns without stop
 */
 
-int: penaltyInconvenientHours; % When includes turn someone has marked as inconvenient
+int: penaltyUndesiredHours; % When includes turn someone has marked as undesired
 int: penaltyMultipleHours; % Multiplies by n(n-1) being n the turns a given person is assigned each day
 int: penaltyNoBrunch; % Every time someone is assigned in a day the two middle turns of the day (no brunch time)
 int: penaltyDiscontinuousHours; % Every time some one has two non continuous torns in a day
@@ -155,7 +155,7 @@ function var int: patternCost(
 	)
 );
 
-var int: cost_inconvenient_daily_distributions(
+var int: cost_daily_distributions_to_avoid(
 	array[Days,Hours] of var set of Persons: t
 ) = sum(
 	d in Days,
@@ -189,26 +189,26 @@ var int: cost_dailyPersonHours(array[Days,Hours] of var set of Persons: t) = sum
 	)
 )*penaltyMultipleHours;
 
-var int: cost_inconvenientTurns(
+var int: cost_undesiredTurns(
 	array[Days,Hours] of var set of Persons: timetable,
-	array[Days,Hours] of var set of Persons: inconvenient,
+	array[Days,Hours] of var set of Persons: undesired,
 ) = sum(
 	d in Days,
 	h in Hours
 )(
-	card(inconvenient[d,h] intersect timetable[d,h])
-) * penaltyInconvenientHours;
+	card(undesired[d,h] intersect timetable[d,h])
+) * penaltyUndesiredHours;
 
 var int: total_cost(
 	array[Days,Hours] of var set of Persons: timetable,
-	array[Days,Hours] of var set of Persons: inconvenient,
+	array[Days,Hours] of var set of Persons: undesired,
 ) = (
-	cost_inconvenient_daily_distributions(timetable) +
+	cost_daily_distributions_to_avoid(timetable) +
 	cost_dailyPersonHours(timetable) +
-	cost_inconvenientTurns(timetable, inconvenient)
+	cost_undesiredTurns(timetable, undesired)
 );
 
-solve minimize(total_cost(timetable, inconvenient));
+solve minimize(total_cost(timetable, undesired));
 
 
 
@@ -229,7 +229,7 @@ output ["Forçats sense indisponibilitats:\n"];
 output booleanTimetable(forcedWithoutBusy);
 output ["Horari final\n"];
 output booleanTimetable(timetable);
-output ["Solution cost: " ++ format(total_cost(timetable, inconvenient))++"\n"];
+output ["Solution cost: " ++ format(total_cost(timetable, undesired))++"\n"];
 
 
 output [show2d(timetable)];

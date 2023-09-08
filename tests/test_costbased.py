@@ -51,9 +51,9 @@ async def test_busy_alice__move_both_turns():
         [[{alice}, {alice}, {nobody}, {barb}]],
         [[{alice}, {alice}, {barb}, {nobody}]],
     ]
-async def test_inconvenient_alice__turns_moved():
+async def test_undesired_alice__turns_moved():
     scenario = minimalScenario()
-    scenario.inconvenientTurn(dl, 3, alice)
+    scenario.undesiredTurn(dl, 3, alice)
     result = await scenario.solve(deterministic=True)
     # When no further restrictions, inconvenient
     # hours are much like busy hours
@@ -62,10 +62,10 @@ async def test_inconvenient_alice__turns_moved():
         [[{alice}, {alice}, {barb}, {nobody}]],
     ]
 
-async def test_inconvenient_but_everybody_else_busy__resignate():
+async def test_undesired_but_everybody_else_busy__resignate():
     scenario = minimalScenario()
     # Alice don't like at fist hour
-    scenario.inconvenientTurn(dl, 0, alice)
+    scenario.undesiredTurn(dl, 0, alice)
     # But Barb really can not do it a first hours
     scenario.busyTurn(dl, 0, barb)
     scenario.busyTurn(dl, 1, barb)
@@ -162,7 +162,7 @@ def baseScenario(**extras):
             [O, O, O, O], # dm
             [O, O, O, O], # dv
         ],
-        inconvenient = [
+        undesired = [
             [{alice}, {alice}, {alice}, {alice}], # dl
             [{barb}, {barb}, {alice, barb, carol}, {barb}], # dm
             [{barb}, {barb}, {barb}, {barb}],  # dv
@@ -182,7 +182,7 @@ async def test_small_problem2():
     scenario = baseScenario(
         forced=None,
         busy=None,
-        inconvenient=None,
+        undesired=None,
     )
     result = await scenario.solve(deterministic=True)
     assert result.solution.timetable == [
