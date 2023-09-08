@@ -3,7 +3,7 @@ from typing import Any
 
 import minizinc
 
-from ..models import TomaticProblem
+from ..models.base import GridProblem
 
 
 class GrillTomatoCooker:
@@ -11,7 +11,7 @@ class GrillTomatoCooker:
         self.model = minizinc.Model(model_path)
         self.solvers = solvers
 
-    async def cook(self, problem_instance: TomaticProblem, deterministic=False) -> Any:
+    async def cook(self, problem_instance: GridProblem, deterministic=False) -> Any:
         result = []
         for attr, value in problem_instance._asdict().items():
             self.model[attr] = value

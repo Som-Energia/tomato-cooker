@@ -1,4 +1,4 @@
-% minizinc cost_based.mzn cost_based_problem1.dzn  -a --solver COIN-BC
+% minizinc model.mzn data-full.dzn  -a --solver COIN-BC
 enum days;
 enum names;
 int: nHours;
@@ -22,11 +22,27 @@ array[Days, Hours] of var set of Persons: timetable;
 
 int: timetableSize = nDays * nHours * nLines;
 
+/*
+int: penaltyInconvenientHours =  5; % When includes turn someone has marked as inconvenient
+int: penaltyMultipleHours = 10; % Multiplies by n(n-1) being n the turns a given person is assigned each day
+int: penaltyNoBrunch = 10; % Every time someone is assigned in a day the two middle turns of the day (no brunch time)
+int: penaltyFarDiscontinuousHours = 20; % Every time some one has two non continuous torns in a day
+int: penaltyDiscontinuousHours = 30; % Every time some one has two non continuous torns in a day
+int: penaltyMarathon = 40; % Every time someone is assigned in a day three turns without stop
+*/
+
+int: penaltyInconvenientHours; % When includes turn someone has marked as inconvenient
+int: penaltyMultipleHours; % Multiplies by n(n-1) being n the turns a given person is assigned each day
+int: penaltyNoBrunch; % Every time someone is assigned in a day the two middle turns of the day (no brunch time)
+int: penaltyDiscontinuousHours; % Every time some one has two non continuous torns in a day
+int: penaltyFarDiscontinuousHours; % Every time some one has two non continuous torns in a day
+int: penaltyMarathon; % Every time someone is assigned in a day three turns without stop
+
 % helper: targetLoad
 int: targetLoad = sum(
 	p in Persons
 )(
-	maxLoad[p]	
+	maxLoad[p]
 );
 
 constraint assert(targetLoad = timetableSize,
@@ -125,39 +141,6 @@ constraint forall(
 	endif
 );
 
-/*
-% Forbiden patterns
-function var bool: pattern(Days: d, Persons: p, bool: h1, bool: h2, bool: h3, bool: h4) = (
-	p in timetable[d,1] = h1 /\
-	p in timetable[d,2] = h2 /\
-	p in timetable[d,3] = h3 /\
-	p in timetable[d,4] = h4 /\
-	true
-);
-
-% If a person has more than one torn the same day, they should be consecutive
-constraint forall (
-	d in Days,
-	p in Persons
-) (
-	% any 0, 1 and 4 hours pattern is ok
-	pattern(d, p, false, false, false, false) \/ % 0
-	pattern(d, p, true, false, false, false) \/  % 1
-	pattern(d, p, false, true, false, false) \/  % 1
-	pattern(d, p, false, false, true, false) \/  % 1
-	pattern(d, p, false, false, false, true) \/  % 1
-	%pattern(d, p, true, true, true, true) \/     % 4
-	% 2 hours patterns must be consecutive, not in the middle
-	pattern(d, p, true, true, false, false) \/   % 2
-	pattern(d, p, false, true, true, false) \/   % 2
-	pattern(d, p, false, false, true, true) \/   % 2
-	% 3 hours patterns need a rest
-	%pattern(d, p, true, true, false, true) \/    % 2
-	%pattern(d, p, true, false, true, true) \/    % 3
-	false
-);
-*/
-
 function var int: patternCost(
 	array[Days,Hours] of var set of Persons: timetable,
 	Days: d, Persons: p,
@@ -179,37 +162,42 @@ var int: cost_inconvenient_daily_distributions(
 	p in Persons diff Nobodies
 )(
 	% No brunch
-	patternCost(t, d, p, false, true, true, false) * 10 +
+	patternCost(t, d, p, false, true, true, false) * penaltyNoBrunch +
 	% Two discontinuous turns interrupts other work
-	patternCost(t, d, p, true, false, false, true) * 20 +
-	patternCost(t, d, p, true, false, true, false) * 30 +
-	patternCost(t, d, p, false, true, false, true) * 30 +
+	patternCost(t, d, p, true, false, false, true) * penaltyFarDiscontinuousHours +
+	patternCost(t, d, p, true, false, true, false) * penaltyDiscontinuousHours +
+	patternCost(t, d, p, false, true, false, true) * penaltyDiscontinuousHours +
 	% But three in a row is too maratonian
-	patternCost(t, d, p, true, true, true, false) * 40 +
-	patternCost(t, d, p, false, true, true, true) * 40 +
+	patternCost(t, d, p, true, true, true, false) * penaltyMarathon +
+	patternCost(t, d, p, false, true, true, true) * penaltyMarathon +
 	0
 );
 
-function var int: quadratic(var int: n) = n * (n-1);
+function var int: semiquadratic(var int: n) = n * (n-1);
 
 var int: cost_dailyPersonHours(array[Days,Hours] of var set of Persons: t) = sum(
 	p in Persons,
 	d in Days
 )(
-	10*quadratic(
+	/* semiquadratic to make worse having the extra load
+	spread among people than to concentrate it on one person.
+	Also computing it by day, makes one person turns to spread
+	among days.
+	*/
+	semiquadratic(
 		dailyPersonLoad(d,p,t)
 	)
-);
+)*penaltyMultipleHours;
 
 var int: cost_inconvenientTurns(
 	array[Days,Hours] of var set of Persons: timetable,
 	array[Days,Hours] of var set of Persons: inconvenient,
-) = 5*sum(
+) = sum(
 	d in Days,
 	h in Hours
 )(
 	card(inconvenient[d,h] intersect timetable[d,h])
-);
+) * penaltyInconvenientHours;
 
 var int: total_cost(
 	array[Days,Hours] of var set of Persons: timetable,
@@ -232,7 +220,6 @@ function array[int] of string: booleanTimetable(array[Days, Hours] of var set of
         if d == nDays then " " ++ format(p) ++ "\n" else " " endif
 	| p in Persons, d in Days
 ] ++ ["\n"];
-
 
 output ["Forçats:\n"];
 output booleanTimetable(forced);
