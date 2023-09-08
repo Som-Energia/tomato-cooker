@@ -1,13 +1,13 @@
 import dataclasses
+from typing import ClassVar
 from pathlib import Path
 from ..base import GridProblem
 
 
-MODEL_DEFINITION_PATH = Path(__file__).absolute().parent.joinpath("phone_grill.mzn")
-
-
 @dataclasses.dataclass
 class TomaticProblem(GridProblem):
+    model_path: ClassVar[Path] = Path(__file__).parent.absolute()/'phone_grill.mzn'
+
     nPersons: int
     nLines: int
     nHours: int

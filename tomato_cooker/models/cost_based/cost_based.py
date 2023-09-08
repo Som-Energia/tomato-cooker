@@ -1,10 +1,12 @@
-from pathlib import Path
 import dataclasses
-from tomato_cooker.grill import GrillTomatoCooker
-from tomato_cooker.models.base import GridProblem
+from typing import ClassVar
+from pathlib import Path
+from ..base import GridProblem
 
 @dataclasses.dataclass
 class TimetableScenario(GridProblem):
+    model_path: ClassVar[Path] = Path(__file__).parent.absolute()/'model.mzn'
+
     names: set[str]
     Nobodies: set[str]
     maxPersonLoadPerDay: int
@@ -52,9 +54,10 @@ class TimetableScenario(GridProblem):
         self._add_to_days_hours_matrix(self.inconvenient, day, hour, persons)
 
     async def solve(self, deterministic=False):
+        from ...grill import GrillTomatoCooker
         parent_dir = Path(__file__).parent.absolute()
         cooker = GrillTomatoCooker(
-            parent_dir/'model.mzn',
+            self.model_path,
             ["coinbc"],
         )
         self.result = await cooker.cook(self, deterministic=deterministic)

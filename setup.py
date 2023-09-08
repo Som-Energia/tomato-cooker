@@ -43,7 +43,8 @@ setup(
     extras_require=extras,
     scripts=[],
     package_data={
-        'tomato_cooker.models.tomatic': ['*mzn']
+        'tomato_cooker.models.tomatic': ['*mzn'],
+        'tomato_cooker.models.cost_based': ['*mzn'],
     },
     include_package_data=True,
     test_suite="pytest",

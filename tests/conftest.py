@@ -1,11 +1,11 @@
 import pytest
 from tomato_cooker.grill import GrillTomatoCooker
-from tomato_cooker.models import TomaticProblem, tomatic
+from tomato_cooker.models import TomaticProblem
 
 
 @pytest.fixture
 def graellador_path():
-    return tomatic.MODEL_DEFINITION_PATH
+    return TomaticProblem.model_path
 
 
 @pytest.fixture
