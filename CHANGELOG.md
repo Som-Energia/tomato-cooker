@@ -1,6 +1,6 @@
 # Change log
 
-## unreleased
+## 0.3.0 (2023-09-10)
 
 - New Problem model: `models.cost_based.TimetableScenario`
     - minimizes costs, enabling new constraints
