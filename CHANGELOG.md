@@ -1,8 +1,20 @@
 # Change log
 
+## unreleased
+
+- New Problem model: `models.cost_based.TimetableScenario`
+    - minimizes costs, enabling new constraints
+    - more flexible under conflicting constraints
+    - more direct problem data mapping, for input and output
+    - added penalty sources as output
+    - methods for executing itself
+- Breaking changes:
+    - `tomato_cooker.models.tomatic.MODEL_DEFINITION_PATH`
+      can now be found as `tomato_cooker.models.tomatic.TomaticProblem.model_path`
+
 ## 0.2.1 (2023-06-20)
 
-  Dterministic mode for testing
+- Deterministic mode for testing
 
 ## 0.2.0 (2023-06-20)
 
