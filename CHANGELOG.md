@@ -1,5 +1,9 @@
 # Change log
 
+## 0.3.1 (2023-09-11)
+
+- Missing `__init__.py` made not finding the package
+
 ## 0.3.0 (2023-09-10)
 
 - New Problem model: `models.cost_based.TimetableScenario`
