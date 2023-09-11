@@ -1,5 +1,9 @@
 # Change log
 
+## 0.3.2 (2023-09-11)
+
+- Backward compatibility with old Py<3.10 type annotation
+
 ## 0.3.1 (2023-09-11)
 
 - Missing `__init__.py` made not finding the package
