@@ -6,7 +6,7 @@ from ..base import GridProblem
 PersonTimetable = list[list[set[str]]]
 
 @dataclasses.dataclass
-class TimetableScenario(GridProblem):
+class TimetableProblem(GridProblem):
     model_path: ClassVar[Path] = Path(__file__).parent.absolute()/'model.mzn'
 
     names: set[str]
