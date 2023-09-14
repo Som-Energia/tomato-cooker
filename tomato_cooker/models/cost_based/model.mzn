@@ -85,6 +85,7 @@ array[Days, Hours] of set of Persons: forcedWithoutBusy = array2d(
 	h in Hours
 ]);
 
+% helper: personLoad
 function var WeeklyHourCount: personLoad(Persons: p) = (
 	sum([1 |
 		d in Days,
@@ -93,6 +94,7 @@ function var WeeklyHourCount: personLoad(Persons: p) = (
 	])
 );
 
+% helper: personLoad_fixed
 function par WeeklyHourCount: personLoad_fixed(Persons: p) = (
 	sum([1 |
 		d in Days,
@@ -101,12 +103,15 @@ function par WeeklyHourCount: personLoad_fixed(Persons: p) = (
 	])
 );
 
+% helper: dailyPersonLoad
 function var DailyHourCount: dailyPersonLoad(Days: d, Persons: p, array[Days,Hours] of var set of Persons: t) = (
 	sum([1 |
 		h in Hours
 		where p in t[d,h]
 	])
 );
+
+%%% Constraints
 
 % All slot are filled
 constraint forall(
@@ -140,6 +145,7 @@ constraint forall(
 	¬ ( p in busy[d,h] /\ p in timetable[d,h] )
 );
 
+%%% var functions to be used to compute penalties
 
 function var int: patternCost(
 	array[Days,Hours] of var set of Persons: timetable,
@@ -155,7 +161,7 @@ function var int: patternCost(
 	)
 );
 
-var int: cost_daily_distributions_to_avoid(
+function var int: cost_daily_distributions_to_avoid(
 	array[Days,Hours] of var set of Persons: t
 ) = sum(
 	d in Days,
@@ -173,14 +179,14 @@ var int: cost_daily_distributions_to_avoid(
 	0
 );
 
-var int: cost_unforced(array[Days,Hours] of var set of Persons: t) = sum(
+function var int: cost_unforced(array[Days,Hours] of var set of Persons: t) = sum(
 	d in Days,
 	h in Hours
 )(
 	card(forcedWithoutBusy[d,h] diff t[d,h])
 ) * penaltyUnforced;
 
-var int: cost_emptySlots(array[Days,Hours] of var set of Persons: t) = sum(
+function var int: cost_emptySlots(array[Days,Hours] of var set of Persons: t) = sum(
 	d in Days,
 	h in Hours
 )(
@@ -188,7 +194,7 @@ var int: cost_emptySlots(array[Days,Hours] of var set of Persons: t) = sum(
 	(nLines - card(t[d,h] intersect Somebody))^2
 ) * penaltyEmpty;
 
-var int: cost_incompletion(array[Days,Hours] of var set of Persons: t) = sum(
+function var int: cost_incompletion(array[Days,Hours] of var set of Persons: t) = sum(
 	d in Days,
 	h in Hours
 )(
@@ -197,7 +203,7 @@ var int: cost_incompletion(array[Days,Hours] of var set of Persons: t) = sum(
 
 function var int: semiquadratic(var int: n) = n * (n-1);
 
-var int: cost_dailyPersonHours(array[Days,Hours] of var set of Persons: t) = sum(
+function var int: cost_dailyPersonHours(array[Days,Hours] of var set of Persons: t) = sum(
 	p in Somebody, % exclude Nobodies
 	d in Days
 )(
@@ -211,7 +217,7 @@ var int: cost_dailyPersonHours(array[Days,Hours] of var set of Persons: t) = sum
 	)
 )*penaltyMultipleHours;
 
-var int: cost_undesiredTurns(
+function var int: cost_undesiredTurns(
 	array[Days,Hours] of var set of Persons: timetable,
 	array[Days,Hours] of var set of Persons: undesired,
 ) = sum(
@@ -221,7 +227,7 @@ var int: cost_undesiredTurns(
 	card(undesired[d,h] intersect timetable[d,h])
 ) * penaltyUndesiredHours;
 
-var int: total_cost(
+function var int: total_cost(
 	array[Days,Hours] of var set of Persons: timetable,
 	array[Days,Hours] of var set of Persons: undesired,
 ) = (0
@@ -235,7 +241,29 @@ var int: total_cost(
 
 solve minimize(total_cost(timetable, undesired));
 
+%% Functions and statements to construct terminal output and output attributes for the caller to get
 
+/*
+Pythoner comment:
+
+Still I don't fully understand why, but functions used
+to generate an output attribute:
+
+- have to be par (non var)
+- timetable derived computations have to fix() its value, and
+- and we should marke final values with ::output_only and ::add_to_output
+
+If we do not declare them like this, the put such values
+as part of the optimization problem and times get looonger.
+This makes that functions used to minimize the cost and to output the cost
+nearly duplicate functionality, and we do not like duplication.
+Expressions put on the (terminal) output directive are ok being var and using timetable.
+
+If you can get a better explanation on how it works, please,
+update this comment.
+If you find a way of deduplicate the code without increasing
+execution times orders of magnitude, please, update the code.
+*/
 
 function array[int] of string: booleanTimetable(array[Days, Hours] of var set of Persons: source) = [
         format(d) ++ ": " ++
@@ -333,6 +361,7 @@ array[int] of tuple(Days, Persons): noBrunchPenalties ::output_only ::add_to_out
 output ["No Brunch Penalties:\n"] ++ [show(noBrunchPenalties)]++["\n\n"];
 
 
+% TODO: Use default result.objective and remove this output attribute
 constraint cost = total_cost(timetable, undesired);
 
 output ["Solution cost: " ++ format(total_cost(timetable, undesired))++"\n"];
