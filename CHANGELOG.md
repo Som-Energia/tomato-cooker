@@ -1,5 +1,12 @@
 # Change log
 
+## 0.4.0 (2023-09-14)
+
+- API changes:
+    - Renamed TimetableScenario -> TimetableProblem
+    - Exposed the default problem in models package
+    - Removed legacy problems from models package
+
 ## 0.3.2 (2023-09-11)
 
 - Backward compatibility with old Py<3.10 type annotation
