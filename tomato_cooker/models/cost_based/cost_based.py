@@ -3,6 +3,8 @@ from typing import ClassVar, Optional
 from pathlib import Path
 from ..base import GridProblem
 
+PersonTimetable = list[list[set[str]]]
+
 @dataclasses.dataclass
 class TimetableScenario(GridProblem):
     model_path: ClassVar[Path] = Path(__file__).parent.absolute()/'model.mzn'
@@ -14,9 +16,9 @@ class TimetableScenario(GridProblem):
     days: list[str] = dataclasses.field(default_factory=lambda: [dl, dm, dx, dj, dv])
     nHours: int = 4
     nLines: int = 6
-    forced: Optional[list[list[set[str]]]] = None
-    busy: Optional[list[list[set[str]]]] = None
-    undesired: Optional[list[list[set[str]]]] = None
+    forced: Optional[PersonTimetable] = None
+    busy: Optional[PersonTimetable] = None
+    undesired: Optional[PersonTimetable] = None
 
     # TODO: Set those parameters with existing or new config.yaml params.
     # Those parameters are set in the model, for isolated testing.
