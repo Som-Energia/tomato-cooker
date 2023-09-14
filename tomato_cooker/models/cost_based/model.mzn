@@ -85,19 +85,6 @@ array[Days, Hours] of set of Persons: forcedWithoutBusy = array2d(
 	h in Hours
 ]);
 
-/*
-% helper: nForcedPerPerson
-array[Persons] of 0..maxPersonLoadPerDay*nDays: nForcedPerPerson = [
-	sum(
-		d in Days,
-		h in Hours
-	)(
-		bool2int(p in  forcedWithoutBusy[d,h])
-	) |
-	p in Persons
-];
-*/
-
 function var WeeklyHourCount: personLoad(Persons: p) = (
 	sum([1 |
 		d in Days,
@@ -153,27 +140,6 @@ constraint forall(
 	¬ ( p in busy[d,h] /\ p in timetable[d,h] )
 );
 
-/*
-% Forced turns for a person are respected,
-% unless the person is busy or
-% it has less load than the forced turns
-% In the later case, all resulting turns for the person
-% in the day should be forced
-% TODO: Forced for the day/hour > nLines
-% TODO: Forced for the person/day > min(maxLoadPerDay, nHours)
-constraint forall(
-	d in Days,
-	h in Hours,
-	p in Persons
-)(
-	if nForcedPerPerson[p] <= maxLoad[p]
-	then
-	(p in forcedWithoutBusy[d,h]) -> (p in timetable[d,h])
-	else 
-	(p in timetable[d,h]) -> (p in forcedWithoutBusy[d,h])
-	endif
-);
-*/
 
 function var int: patternCost(
 	array[Days,Hours] of var set of Persons: timetable,
