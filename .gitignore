@@ -4,3 +4,4 @@ __pycache__
 *.sw?
 dist/
 .coverage
+build/
