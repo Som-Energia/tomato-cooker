@@ -1,6 +1,6 @@
 import pytest
 from tomato_cooker.grill import GrillTomatoCooker
-from tomato_cooker.models import TomaticProblem
+from tomato_cooker.models import TimetableProblem
 
 
 @pytest.fixture
