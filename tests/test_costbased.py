@@ -1,5 +1,5 @@
 import pytest
-from tomato_cooker.models.cost_based.cost_based import TimetableScenario
+from tomato_cooker.models.cost_based.cost_based import TimetableProblem
 
 
 # Use global vars instead of strings to avoid unnoticed misspels
@@ -9,7 +9,7 @@ O = set()
 
 def minimalScenario(**overrides):
     """One day, one line, four hours, two people and nobody"""
-    return TimetableScenario(**dict(dict(
+    return TimetableProblem(**dict(dict(
         days=['dl'],
         nLines=1,
         names=[alice, barb, nobody],
@@ -158,7 +158,7 @@ async def test_fixed_ignored_if_exceeds_persons_max_load_in_multiple_days():
 
 def baseScenario(**extras):
 
-    return TimetableScenario(**dict(dict(
+    return TimetableProblem(**dict(dict(
         days=[dl,dm,dv],
         nHours=4,
         nLines=2,
